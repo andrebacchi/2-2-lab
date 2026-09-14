@@ -119,4 +119,8 @@
     --muted-foreground: 200 10% 25%;
     --muted: 40 20% 92%;
   }
+
+  .focus-mode .focus-hide {
+    display: none;
+  }
   }

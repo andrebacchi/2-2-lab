@@ -412,5 +412,8 @@ export const PRESETS = [
   { key: 'negativa', name: 'Associação negativa (protetora)', a: 20, b: 80, c: 60, d: 40 },
   { key: 'amostra_peq', name: 'Amostra pequena', a: 4, b: 6, c: 1, d: 9 },
   { key: 'amostra_grd', name: 'Amostra grande', a: 400, b: 600, c: 200, d: 800 },
-  { key: 'esperadas_peq', name: 'Frequências esperadas pequenas', a: 3, b: 30, c: 0, d: 40 },
+  { key: 'esperadas_peq', name: 'Frequências esperadas pequenas', a: 3, b: 30, c: 0, d: 40, desc: 'Células com E<5: o χ² perde confiabilidade — prefira Fisher.' },
+  { key: 'fumo', name: 'Fumo × câncer', a: 90, b: 10, c: 30, d: 70, desc: 'Coorte: tabagismo e câncer de pulmão.' },
+  { key: 'vacina', name: 'Vacina × infecção', a: 20, b: 80, c: 60, d: 40, desc: 'Ensaio: vacina reduz o risco (efeito protetor).' },
+  { key: 'exame', name: 'Exame × diagnóstico', a: 45, b: 5, c: 15, d: 35, desc: 'Teste diagnóstico: alta sensibilidade e especificidade.' },
 ];

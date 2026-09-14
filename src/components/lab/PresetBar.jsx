@@ -9,6 +9,7 @@ export default function PresetBar({ onLoad }) {
         <button
           key={p.key}
           onClick={() => onLoad(p)}
+          title={p.desc}
           className="text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground whitespace-nowrap transition-colors"
         >
           {p.name}
