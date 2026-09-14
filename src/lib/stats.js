@@ -1,0 +1,226 @@
+// =============================================================
+// 2×2 LAB — Camada central de cálculo estatístico
+// Toda estatística deriva dos mesmos quatro valores a,b,c,d.
+// Os componentes visuais apenas consomem os resultados.
+// =============================================================
+
+function sanitize(v) {
+  let n = Math.round(Number(v));
+  if (!Number.isFinite(n) || n < 0) n = 0;
+  return n;
+}
+
+// ---- funções especiais (gama incompleta regularizada) ----------
+function lnGamma(x) {
+  const g = 7;
+  const c = [
+    0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+    771.32342877765313, -176.61502916214059, 12.507343278686905,
+    -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7,
+  ];
+  if (x < 0.5) {
+    return Math.log(Math.PI / Math.sin(Math.PI * x)) - lnGamma(1 - x);
+  }
+  x -= 1;
+  let a = c[0];
+  const t = x + g + 0.5;
+  for (let i = 1; i < g + 2; i++) a += c[i] / (x + i);
+  return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+}
+
+// P(a,x) — gama incompleta inferior regularizada
+function gammp(a, x) {
+  if (x < 0 || a <= 0) return 0;
+  if (x === 0) return 0;
+  if (x < a + 1) {
+    let ap = a;
+    let sum = 1 / a;
+    let del = sum;
+    for (let n = 0; n < 300; n++) {
+      ap += 1;
+      del *= x / ap;
+      sum += del;
+      if (Math.abs(del) < Math.abs(sum) * 1e-16) break;
+    }
+    return sum * Math.exp(-x + a * Math.log(x) - lnGamma(a));
+  }
+  let b = x + 1 - a;
+  let cc = 1 / 1e-30;
+  let d = 1 / b;
+  let h = d;
+  for (let i = 1; i < 300; i++) {
+    const an = -i * (i - a);
+    b += 2;
+    d = an * d + b;
+    if (Math.abs(d) < 1e-30) d = 1e-30;
+    cc = b + an / cc;
+    if (Math.abs(cc) < 1e-30) cc = 1e-30;
+    d = 1 / d;
+    const del = d * cc;
+    h *= del;
+    if (Math.abs(del - 1) < 1e-16) break;
+  }
+  return 1 - Math.exp(-x + a * Math.log(x) - lnGamma(a)) * h;
+}
+
+// Q(a,x) — cauda superior (usada para p-valor do χ²)
+export function gammq(a, x) {
+  return 1 - gammp(a, x);
+}
+
+const safeDiv = (num, den) => (den > 0 ? num / den : null);
+const contrib = (o, e) => (e !== null && e > 0 ? ((o - e) ** 2) / e : null);
+const contribYates = (o, e) =>
+  e !== null && e > 0 ? (Math.abs(o - e) - 0.5) ** 2 / e : null;
+
+// =============================================================
+// calculate2x2 — função central
+// retorna totais, proporções, medidas, frequências esperadas,
+// χ² (Pearson + Yates), contribuições, resíduos, p-valores, phi.
+// Componentes consomem este objeto; nada duplica a lógica.
+// =============================================================
+export function calculate2x2(a, b, c, d) {
+  a = sanitize(a);
+  b = sanitize(b);
+  c = sanitize(c);
+  d = sanitize(d);
+
+  const n = a + b + c + d;
+  const row1 = a + b; // expostos
+  const row2 = c + d; // não expostos
+  const col1 = a + c; // com desfecho
+  const col2 = b + d; // sem desfecho
+
+  // proporções por linha, coluna e total
+  const proportions = {
+    row: {
+      a: safeDiv(a, row1),
+      b: safeDiv(b, row1),
+      c: safeDiv(c, row2),
+      d: safeDiv(d, row2),
+    },
+    col: {
+      a: safeDiv(a, col1),
+      c: safeDiv(c, col1),
+      b: safeDiv(b, col2),
+      d: safeDiv(d, col2),
+    },
+    total: {
+      a: safeDiv(a, n),
+      b: safeDiv(b, n),
+      c: safeDiv(c, n),
+      d: safeDiv(d, n),
+    },
+  };
+
+  // riscos / probabilidades condicionais
+  const riskExp = safeDiv(a, row1); // P(desfecho | exposição)
+  const riskUnexp = safeDiv(c, row2); // P(desfecho | não exposição)
+
+  // chances (odds)
+  const oddsExp = safeDiv(a, b);
+  const oddsUnexp = safeDiv(c, d);
+
+  // medidas de associação
+  const OR = b > 0 && c > 0 ? (a * d) / (b * c) : null;
+  const RR =
+    riskExp !== null && riskUnexp !== null && riskUnexp !== 0
+      ? riskExp / riskUnexp
+      : null;
+  const RD =
+    riskExp !== null && riskUnexp !== null ? riskExp - riskUnexp : null;
+
+  // frequências esperadas sob H0
+  const expected = {
+    a: safeDiv(row1 * col1, n),
+    b: safeDiv(row1 * col2, n),
+    c: safeDiv(row2 * col1, n),
+    d: safeDiv(row2 * col2, n),
+  };
+
+  // contribuições e χ²
+  const ca = contrib(a, expected.a);
+  const cb = contrib(b, expected.b);
+  const cc = contrib(c, expected.c);
+  const cd = contrib(d, expected.d);
+  const contributions = { a: ca, b: cb, c: cc, d: cd };
+  const chi2 = [ca, cb, cc, cd].reduce((s, v) => s + (v ?? 0), 0);
+
+  const ya = contribYates(a, expected.a);
+  const yb = contribYates(b, expected.b);
+  const yc = contribYates(c, expected.c);
+  const yd = contribYates(d, expected.d);
+  const chi2Yates = [ya, yb, yc, yd].reduce((s, v) => s + (v ?? 0), 0);
+
+  // resíduos
+  const r = (o, e) => (e !== null ? o - e : null);
+  const sr = (o, e) => (e !== null && e > 0 ? (o - e) / Math.sqrt(e) : null);
+  const residuals = {
+    a: r(a, expected.a),
+    b: r(b, expected.b),
+    c: r(c, expected.c),
+    d: r(d, expected.d),
+  };
+  const stdResiduals = {
+    a: sr(a, expected.a),
+    b: sr(b, expected.b),
+    c: sr(c, expected.c),
+    d: sr(d, expected.d),
+  };
+
+  // p-valores (df = 1 para tabela 2×2)
+  const df = 1;
+  const pPearson = n > 0 ? gammq(df / 2, chi2 / 2) : null;
+  const pYates = n > 0 ? gammq(df / 2, chi2Yates / 2) : null;
+
+  // phi (tamanho de efeito)
+  const phi = n > 0 ? Math.sqrt(chi2 / n) : null;
+  const phiSigned = phi !== null ? phi * Math.sign(a * d - b * c) : null;
+
+  return {
+    a,
+    b,
+    c,
+    d,
+    totals: {
+      row1,
+      row2,
+      col1,
+      col2,
+      n,
+      exposed: row1,
+      unexposed: row2,
+      withOutcome: col1,
+      withoutOutcome: col2,
+    },
+    proportions,
+    riskExp,
+    riskUnexp,
+    oddsExp,
+    oddsUnexp,
+    OR,
+    RR,
+    RD,
+    expected,
+    contributions,
+    chi2,
+    chi2Yates,
+    pPearson,
+    pYates,
+    residuals,
+    stdResiduals,
+    phi,
+    phiSigned,
+  };
+}
+
+export const PRESETS = [
+  { key: 'inicio', name: 'Inicial', a: 40, b: 60, c: 20, d: 80 },
+  { key: 'sem_assoc', name: 'Sem associação', a: 50, b: 50, c: 50, d: 50 },
+  { key: 'pos_fraca', name: 'Associação positiva fraca', a: 45, b: 55, c: 35, d: 65 },
+  { key: 'pos_forte', name: 'Associação positiva forte', a: 70, b: 30, c: 20, d: 80 },
+  { key: 'negativa', name: 'Associação negativa (protetora)', a: 20, b: 80, c: 60, d: 40 },
+  { key: 'amostra_peq', name: 'Amostra pequena', a: 4, b: 6, c: 1, d: 9 },
+  { key: 'amostra_grd', name: 'Amostra grande', a: 400, b: 600, c: 200, d: 800 },
+  { key: 'esperadas_peq', name: 'Frequências esperadas pequenas', a: 3, b: 30, c: 0, d: 40 },
+];
