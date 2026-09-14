@@ -11,6 +11,7 @@ import {
   Superscript,
   Activity,
   ListChecks,
+  Lightbulb,
 } from 'lucide-react';
 import ComparisonBars from './ComparisonBars';
 import StackedBars from './StackedBars';
@@ -23,6 +24,7 @@ import ExpectedFrequencies from './ExpectedFrequencies';
 import ChiSquarePanel from './ChiSquarePanel';
 import ChiSquareDistribution from './ChiSquareDistribution';
 import TestsComparison from './TestsComparison';
+import ExplanationPanel from './ExplanationPanel';
 
 const TABS = [
   { key: 'grupos', label: 'Grupos', icon: BarChart3 },
@@ -36,9 +38,10 @@ const TABS = [
   { key: 'chisq', label: 'χ²', icon: Superscript },
   { key: 'distribuicao', label: 'Distribuição', icon: Activity },
   { key: 'testes', label: 'Testes', icon: ListChecks },
+  { key: 'explicacao', label: 'Explicação', icon: Lightbulb },
 ];
 
-export default function VisualizationTabs({ r, labels, reduceMotion }) {
+export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
   const [tab, setTab] = useState('grupos');
 
   return (
@@ -86,6 +89,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion }) {
       )}
       {tab === 'distribuicao' && <ChiSquareDistribution r={r} />}
       {tab === 'testes' && <TestsComparison r={r} />}
+      {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
     </div>
   );
 }

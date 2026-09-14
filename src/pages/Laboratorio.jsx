@@ -73,6 +73,7 @@ export default function Laboratorio() {
           <div className="lg:sticky lg:top-20">
             <VisualizationTabs
               r={r}
+              values={values}
               labels={labels}
               reduceMotion={reduceMotion}
             />
