@@ -11,9 +11,14 @@ export default function LabHeader({
     <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-30">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
         <div className="flex items-baseline gap-3 min-w-0">
-          <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-foreground whitespace-nowrap">
-            2×2 <span className="text-teal-700">LAB</span>
-          </h1>
+          <div className="min-w-0">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-foreground whitespace-nowrap">
+              2×2 <span className="text-teal-700">LAB</span>
+            </h1>
+            <p className="text-[11px] text-muted-foreground/80 font-body">
+              Desenvolvido por André Demambre Bacchi
+            </p>
+          </div>
           <span className="hidden sm:inline text-sm text-muted-foreground italic font-display">
             Uma tabela. Muitas perguntas.
           </span>
