@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { fmtInt } from '@/lib/format';
 import { rescaleTable, MIN_N } from '@/lib/stats';
@@ -32,6 +32,17 @@ function NTotalEditor({ values, setValues }) {
   const sliderMax = Math.max(200, Math.ceil((n + 20) / 10) * 10);
   const atMin = n <= MIN_N;
 
+  // draft evita redimensionar a cada tecla — só aplica em blur/Enter
+  const [draft, setDraft] = useState(null);
+  const commit = () => {
+    if (draft !== null && draft !== '') {
+      const m = Number(draft);
+      if (Number.isFinite(m)) setN(m);
+    }
+    setDraft(null);
+  };
+  const inputValue = draft !== null ? draft : String(n);
+
   return (
     <div className="flex flex-col items-center justify-center px-3 py-3 bg-teal-50/70 border border-teal-200 rounded-md">
       <div className="flex items-center gap-1.5">
@@ -46,8 +57,13 @@ function NTotalEditor({ values, setValues }) {
         <input
           type="number"
           min={MIN_N}
-          value={n}
-          onChange={(e) => setN(e.target.value)}
+          value={inputValue}
+          onFocus={() => setDraft(String(n))}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.currentTarget.blur();
+          }}
           className="w-16 text-center text-xl font-semibold bg-transparent border-b-2 border-transparent focus:border-teal-600 focus:outline-none text-foreground tabular-nums"
           aria-label="Total n"
         />
