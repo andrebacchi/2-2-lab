@@ -87,15 +87,21 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
                 <div
                   className={`w-16 sm:w-20 h-full rounded-t-md ${bar.color} relative`}
                 >
-                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-sm font-semibold tabular-nums text-foreground whitespace-nowrap bg-background px-1.5 rounded shadow-sm">
-                    {mode === 'abs' ? fmtInt(bar.abs) : fmtPct(bar.pct, 1)}
-                  </span>
+                  {mode === 'pct' ? (
+                    <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-sm font-semibold tabular-nums text-foreground whitespace-nowrap bg-background/90 px-1.5 rounded shadow-sm">
+                      {fmtPct(bar.pct, 1)}
+                    </span>
+                  ) : (
+                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-sm font-semibold tabular-nums text-foreground whitespace-nowrap bg-background px-1.5 rounded shadow-sm">
+                      {fmtInt(bar.abs)}
+                    </span>
+                  )}
                 </div>
               </motion.div>
 
               {showWhisker && (
                 <div
-                  className="absolute pointer-events-none z-0"
+                  className="absolute pointer-events-none z-20 w-1"
                   style={{
                     left: `${center}%`,
                     transform: 'translateX(-50%)',
@@ -103,10 +109,10 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
                     height: `${(ci.high - ci.low) * 100}%`,
                   }}
                 >
-                  <div className="relative w-0.5 h-full bg-foreground/80 mx-auto">
-                    <div className="absolute -left-[7px] top-0 w-4 h-0.5 bg-foreground/80" />
-                    <div className="absolute -left-[7px] bottom-0 w-4 h-0.5 bg-foreground/80" />
-                  </div>
+                  <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 bg-white/60" />
+                  <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-foreground/80" />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-0.5 bg-foreground/80" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-0.5 bg-foreground/80" />
                 </div>
               )}
             </React.Fragment>
