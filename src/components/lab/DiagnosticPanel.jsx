@@ -154,16 +154,6 @@ export default function DiagnosticPanel({ r }) {
               postPos={postPos}
               postNeg={postNeg}
             />
-            <div className="flex items-center justify-center gap-4 mt-1 text-[11px] text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <span className="inline-block w-4 h-0.5 bg-teal-700" /> teste
-                positivo
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="inline-block w-4 border-t-2 border-dashed border-rose-500" />{' '}
-                teste negativo
-              </span>
-            </div>
           </div>
         ) : (
           <p className="text-xs text-muted-foreground italic">
