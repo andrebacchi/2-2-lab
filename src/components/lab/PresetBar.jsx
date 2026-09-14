@@ -4,7 +4,7 @@ import { PRESETS } from '@/lib/stats';
 export default function PresetBar({ onLoad }) {
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-1">
-      <span className="text-xs text-muted-foreground shrink-0">Exemplos:</span>
+      <span className="text-xs text-muted-foreground shrink-0">Exemplos pré-definidos:</span>
       {PRESETS.map((p) => (
         <button
           key={p.key}

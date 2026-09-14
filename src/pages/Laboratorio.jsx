@@ -64,13 +64,8 @@ export default function Laboratorio() {
       <main className={`max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6 ${focus ? 'focus-mode' : ''}`}>
         {/* Subtítulo / frase */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <p className="font-display text-lg text-muted-foreground italic">
-              Manipule os dados. Descubra a associação.
-            </p>
-            <div className="mt-3 focus-hide">
-              <PresetBar onLoad={loadPreset} />
-            </div>
+          <div className="focus-hide">
+            <PresetBar onLoad={loadPreset} />
           </div>
           <ProductToolbar
             onChallenges={() => setOpenChallenges(true)}

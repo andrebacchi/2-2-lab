@@ -19,9 +19,6 @@ export default function LabHeader({
               Desenvolvido por André Demambre Bacchi
             </p>
           </div>
-          <span className="hidden sm:inline text-sm text-muted-foreground italic font-display">
-            Uma tabela. Muitas perguntas.
-          </span>
         </div>
 
         <div className="flex items-center gap-2">
