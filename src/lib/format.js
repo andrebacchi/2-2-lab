@@ -34,3 +34,16 @@ export function fmtMeasure(value, decimals = 2) {
     return 'Não estimável';
   return fmt(value, decimals);
 }
+
+// texto de intervalo de confiança "low – high" ou "não estimável"
+export function ciText(ci, decimals = 2) {
+  if (
+    !ci ||
+    ci.low === null ||
+    ci.high === null ||
+    !Number.isFinite(ci.low) ||
+    !Number.isFinite(ci.high)
+  )
+    return 'não estimável';
+  return `${fmt(ci.low, decimals)} – ${fmt(ci.high, decimals)}`;
+}

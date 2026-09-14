@@ -73,6 +73,23 @@ const contrib = (o, e) => (e !== null && e > 0 ? ((o - e) ** 2) / e : null);
 const contribYates = (o, e) =>
   e !== null && e > 0 ? (Math.abs(o - e) - 0.5) ** 2 / e : null;
 
+// níveis críticos de z para IC
+const Z_LEVELS = { 0.9: 1.644853627, 0.95: 1.959963985, 0.99: 2.575829304 };
+export function zForLevel(level) {
+  return Z_LEVELS[level] || Z_LEVELS[0.95];
+}
+
+// intervalo de Wilson para uma proporção x/n (adequado para n pequeno)
+function wilsonCI(x, n, z) {
+  if (!n || n <= 0) return { low: null, high: null };
+  const p = x / n;
+  const denom = 1 + (z * z) / n;
+  const center = (p + (z * z) / (2 * n)) / denom;
+  const half =
+    (z * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n))) / denom;
+  return { low: Math.max(0, center - half), high: Math.min(1, center + half) };
+}
+
 // =============================================================
 // calculate2x2 — função central
 // retorna totais, proporções, medidas, frequências esperadas,
@@ -129,6 +146,31 @@ export function calculate2x2(a, b, c, d) {
       : null;
   const RD =
     riskExp !== null && riskUnexp !== null ? riskExp - riskUnexp : null;
+
+  // intervalos de confiança (95% por padrão)
+  const z = zForLevel(0.95);
+  const riskExpCI = wilsonCI(a, row1, z);
+  const riskUnexpCI = wilsonCI(c, row2, z);
+
+  // IC do RR via método delta no log(RR)
+  let RRCI = null;
+  if (RR !== null && a > 0 && c > 0) {
+    const seRR = Math.sqrt(1 / a - 1 / row1 + 1 / c - 1 / row2);
+    RRCI = {
+      low: Math.exp(Math.log(RR) - z * seRR),
+      high: Math.exp(Math.log(RR) + z * seRR),
+    };
+  }
+
+  // IC do OR via método delta no log(OR)
+  let ORCI = null;
+  if (OR !== null && a > 0 && b > 0 && c > 0 && d > 0) {
+    const seOR = Math.sqrt(1 / a + 1 / b + 1 / c + 1 / d);
+    ORCI = {
+      low: Math.exp(Math.log(OR) - z * seOR),
+      high: Math.exp(Math.log(OR) + z * seOR),
+    };
+  }
 
   // frequências esperadas sob H0
   const expected = {
@@ -201,6 +243,10 @@ export function calculate2x2(a, b, c, d) {
     OR,
     RR,
     RD,
+    RRCI,
+    ORCI,
+    riskExpCI,
+    riskUnexpCI,
     expected,
     contributions,
     chi2,

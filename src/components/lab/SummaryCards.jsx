@@ -1,5 +1,5 @@
 import React from 'react';
-import { fmtInt, fmtPct, fmtMeasure, fmtP } from '@/lib/format';
+import { fmtInt, fmtPct, fmtMeasure, fmtP, ciText } from '@/lib/format';
 
 const LEFT_BORDERS = {
   'teal-700': 'border-l-4 border-l-teal-700',
@@ -39,15 +39,15 @@ export default function SummaryCards({ r }) {
         sub={`c / (c+d) = ${fmtInt(r.c)} / ${fmtInt(r.totals.row2)}`}
       />
       <Card
-        label="RR"
+        label="RR / RP"
         value={fmtMeasure(r.RR)}
-        sub="risco relativo"
+        sub={`IC 95%: ${ciText(r.RRCI)}${r.RR !== null ? ' · RP = mesmo cálculo (transversal)' : ''}`}
         accent="teal-600"
       />
       <Card
         label="OR"
         value={fmtMeasure(r.OR)}
-        sub="odds ratio"
+        sub={`IC 95%: ${ciText(r.ORCI)}`}
         accent="teal-600"
       />
     </section>
