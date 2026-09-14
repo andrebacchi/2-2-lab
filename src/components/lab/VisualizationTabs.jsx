@@ -42,7 +42,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
   const [tab, setTab] = useState('grupos');
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
       <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
         {TABS.map((t) => {
           const Icon = t.icon;
@@ -52,8 +52,8 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
               onClick={() => setTab(t.key)}
               className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap transition-colors ${
                 tab === t.key
-                  ? 'bg-teal-700 text-white border-teal-700'
-                  : 'text-muted-foreground border-border hover:bg-accent'
+                  ? 'bg-foreground text-background border-foreground'
+                  : 'text-muted-foreground border-border hover:bg-muted hover:border-foreground/20'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

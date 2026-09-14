@@ -9,7 +9,7 @@ const LEFT_BORDERS = {
 function Card({ label, value, sub, accent }) {
   return (
     <button
-      className={`text-left rounded-xl border border-border bg-card px-4 py-3 shadow-sm hover:shadow-md transition-shadow ${
+      className={`text-left rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-foreground/25 ${
         accent ? LEFT_BORDERS[accent] || '' : ''
       }`}
     >

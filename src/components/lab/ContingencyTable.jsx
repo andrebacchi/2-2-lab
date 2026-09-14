@@ -38,7 +38,7 @@ export default function ContingencyTable({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-display text-lg font-semibold text-foreground">
           Tabela de contingência

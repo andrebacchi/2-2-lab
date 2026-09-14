@@ -27,7 +27,7 @@ export default function ProportionsPanel({ r, labels }) {
   };
 
   return (
-    <section className="rounded-xl border border-border bg-background p-4 sm:p-5 shadow-sm">
+    <section className="rounded-xl border border-border bg-background p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Proporções
@@ -35,10 +35,10 @@ export default function ProportionsPanel({ r, labels }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowDenom((s) => !s)}
-            className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+            className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${
               showDenom
-                ? 'bg-teal-700 text-white border-teal-700'
-                : 'text-muted-foreground border-border hover:bg-accent'
+                ? 'bg-foreground text-background border-foreground'
+                : 'text-muted-foreground border-border hover:bg-muted'
             }`}
           >
             Mostrar denominadores
@@ -56,7 +56,7 @@ export default function ProportionsPanel({ r, labels }) {
           <button
             key={p.key}
             onClick={() => setPerspective(p.key)}
-            className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+            className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${
               perspective === p.key
                 ? 'bg-foreground text-background border-foreground'
                 : 'text-muted-foreground border-border hover:bg-accent'
