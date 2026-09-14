@@ -13,6 +13,7 @@ import {
   ListChecks,
   Lightbulb,
   Microscope,
+  Atom,
 } from 'lucide-react';
 import ComparisonBars from './ComparisonBars';
 import StackedBars from './StackedBars';
@@ -27,6 +28,7 @@ import ChiSquareDistribution from './ChiSquareDistribution';
 import TestsComparison from './TestsComparison';
 import ExplanationPanel from './ExplanationPanel';
 import StudyContextPanel from './StudyContextPanel';
+import AdvancedPanel from './AdvancedPanel';
 
 const TABS = [
   { key: 'grupos', label: 'Grupos', icon: BarChart3 },
@@ -42,6 +44,7 @@ const TABS = [
   { key: 'testes', label: 'Testes', icon: ListChecks },
   { key: 'explicacao', label: 'Explicação', icon: Lightbulb },
   { key: 'contexto', label: 'Contexto', icon: Microscope },
+  { key: 'avancado', label: 'Avançado', icon: Atom },
 ];
 
 export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
@@ -94,6 +97,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
       {tab === 'testes' && <TestsComparison r={r} />}
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
       {tab === 'contexto' && <StudyContextPanel r={r} />}
+      {tab === 'avancado' && <AdvancedPanel r={r} />}
     </div>
   );
 }

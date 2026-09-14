@@ -79,6 +79,11 @@ export function zForLevel(level) {
   return Z_LEVELS[level] || Z_LEVELS[0.95];
 }
 
+// IC de Wilson para uma proporção x/n (exportado para os painéis)
+export function proportionCI(x, n, level = 0.95) {
+  return wilsonCI(x, n, zForLevel(level));
+}
+
 // intervalo de Wilson para uma proporção x/n (adequado para n pequeno)
 function wilsonCI(x, n, z) {
   if (!n || n <= 0) return { low: null, high: null };
