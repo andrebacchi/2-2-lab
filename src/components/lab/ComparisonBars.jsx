@@ -78,7 +78,7 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
           return (
             <React.Fragment key={bar.key}>
               <motion.div
-                className="absolute bottom-0"
+                className="absolute bottom-0 z-10"
                 style={{ left: `${center}%`, transform: 'translateX(-50%)' }}
                 initial={false}
                 animate={{ height: `${heightPct}%` }}
@@ -87,7 +87,7 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
                 <div
                   className={`w-16 sm:w-20 h-full rounded-t-md ${bar.color} relative`}
                 >
-                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-sm font-semibold tabular-nums text-foreground whitespace-nowrap">
+                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-sm font-semibold tabular-nums text-foreground whitespace-nowrap bg-background px-1.5 rounded shadow-sm">
                     {mode === 'abs' ? fmtInt(bar.abs) : fmtPct(bar.pct, 1)}
                   </span>
                 </div>
@@ -95,7 +95,7 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
 
               {showWhisker && (
                 <div
-                  className="absolute pointer-events-none"
+                  className="absolute pointer-events-none z-0"
                   style={{
                     left: `${center}%`,
                     transform: 'translateX(-50%)',

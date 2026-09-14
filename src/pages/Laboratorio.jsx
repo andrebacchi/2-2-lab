@@ -67,7 +67,7 @@ export default function Laboratorio() {
               labels={labels}
               setLabels={setLabels}
             />
-            <TotalsPanel r={r} />
+            <TotalsPanel r={r} values={values} setValues={setValues} />
           </div>
 
           <div className="lg:sticky lg:top-20">

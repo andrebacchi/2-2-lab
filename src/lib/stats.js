@@ -260,6 +260,49 @@ export function calculate2x2(a, b, c, d) {
   };
 }
 
+// redimensiona a tabela mantendo as proporções (maior resto) — soma = newN
+export function rescaleTable(values, newN) {
+  const a = sanitize(values.a);
+  const b = sanitize(values.b);
+  const c = sanitize(values.c);
+  const d = sanitize(values.d);
+  const n = a + b + c + d;
+  let target = Math.round(Number(newN));
+  if (!Number.isFinite(target) || target < 0) target = 0;
+  if (n === 0) return { a: 0, b: 0, c: 0, d: 0 };
+  if (target === n) return { a, b, c, d };
+
+  const factor = target / n;
+  const raw = { a: a * factor, b: b * factor, c: c * factor, d: d * factor };
+  const floored = {
+    a: Math.floor(raw.a),
+    b: Math.floor(raw.b),
+    c: Math.floor(raw.c),
+    d: Math.floor(raw.d),
+  };
+  let remainder = target - (floored.a + floored.b + floored.c + floored.d);
+  const fracs = ['a', 'b', 'c', 'd']
+    .map((k) => ({ k, f: raw[k] - floored[k] }))
+    .sort((x, y) => y.f - x.f);
+
+  const result = { ...floored };
+  let i = 0;
+  while (remainder > 0 && i < fracs.length) {
+    result[fracs[i].k] += 1;
+    remainder -= 1;
+    i += 1;
+  }
+  i = fracs.length - 1;
+  while (remainder < 0 && i >= 0) {
+    if (result[fracs[i].k] > 0) {
+      result[fracs[i].k] -= 1;
+      remainder += 1;
+    }
+    i -= 1;
+  }
+  return result;
+}
+
 export const PRESETS = [
   { key: 'inicio', name: 'Inicial', a: 40, b: 60, c: 20, d: 80 },
   { key: 'sem_assoc', name: 'Sem associação', a: 50, b: 50, c: 50, d: 50 },
