@@ -9,7 +9,7 @@ import {
   Circle,
   XCircle,
 } from 'lucide-react';
-import { fmt, fmtInt, ciText } from '@/lib/format';
+import { fmt, fmtInt, fmtPct, ciText } from '@/lib/format';
 
 const STUDY_TYPES = {
   coorte: {
@@ -49,9 +49,10 @@ const STUDY_TYPES = {
     desc: 'Intervenção alocada → desfecho. Como coorte, mas a exposição é manipulada pelo pesquisador.',
     measures: [
       { key: 'RR', status: 'recomendada', note: 'Razão de riscos entre intervenção e controle.' },
-      { key: 'RD', status: 'recomendada', note: 'Redução absoluta de risco (ARR); NNT = 1/|RD|.' },
-      { key: 'NNT', status: 'recomendada', note: 'Número necessário para tratar — quanto menor, mais eficaz a intervenção.' },
-      { key: 'OR', status: 'possivel', note: 'Válido, mas menos intuitivo que RR/RD em ensaios.' },
+      { key: 'RRR', status: 'recomendada', note: 'Redução relativa do risco = 1 − RR.' },
+      { key: 'RAR', status: 'recomendada', note: 'Redução absoluta do risco (ARR) = risco_controle − risco_tratado.' },
+      { key: 'NNT', status: 'recomendada', note: 'Número necessário para tratar = 1/RAR (quanto menor, mais eficaz).' },
+      { key: 'OR', status: 'possivel', note: 'Válido, mas menos intuitivo que RR/RAR em ensaios.' },
     ],
   },
 };
@@ -66,13 +67,28 @@ function measureValue(key, r) {
       return { val: r.RD, ci: r.RDCI, label: 'RD' };
     case 'OR':
       return { val: r.OR, ci: r.ORCI, label: 'OR' };
+    case 'RRR':
+      return { val: r.RR !== null ? 1 - r.RR : null, ci: null, label: 'RRR' };
+    case 'RAR': {
+      // RAR = risco_controle − risco_tratado = −RD (positivo = benefício)
+      return { val: r.RD !== null ? -r.RD : null, ci: null, label: 'RAR' };
+    }
     case 'NNT': {
-      const val = r.RD !== null && r.RD !== 0 ? Math.ceil(1 / Math.abs(r.RD)) : null;
+      const rar = r.RD !== null ? -r.RD : null;
+      const val = rar !== null && rar > 0 ? Math.ceil(1 / rar) : null;
       return { val, ci: null, label: 'NNT' };
     }
     default:
       return { val: null, ci: null, label: key };
   }
+}
+
+// formata o valor de acordo com a medida (proporção, contagem ou razão)
+function formatVal(mv) {
+  if (mv.val === null) return '—';
+  if (mv.label === 'NNT') return fmtInt(mv.val);
+  if (mv.label === 'RRR' || mv.label === 'RAR') return fmtPct(mv.val, 1);
+  return fmt(mv.val, 2);
 }
 
 const STATUS = {
@@ -148,7 +164,7 @@ export default function StudyContextPanel({ r }) {
             Medida recomendada · {recVal.label}
           </div>
           <div className="text-2xl font-semibold tabular-nums text-foreground">
-            {recVal.label === 'NNT' ? fmtInt(recVal.val) : fmt(recVal.val, 2)}{' '}
+            {formatVal(recVal)}{' '}
             {recVal.ci && (
               <span className="text-sm font-normal text-muted-foreground">
                 [{ciText(recVal.ci)}]
@@ -186,9 +202,7 @@ export default function StudyContextPanel({ r }) {
                   </span>
                   {showVal && (
                     <span className="ml-auto text-sm tabular-nums text-teal-700 font-semibold">
-                      {mv.label === 'NNT'
-                        ? fmtInt(mv.val)
-                        : fmt(mv.val, 2)}
+                      {formatVal(mv)}
                       {mv.ci && (
                         <span className="text-muted-foreground font-normal">
                           {' '}
