@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import {
   BarChart3,
   Percent,
-  Users,
-  Grid2x2,
-  Flame,
   Sigma,
   MoveHorizontal,
   Table,
@@ -17,9 +14,6 @@ import {
 } from 'lucide-react';
 import ComparisonBars from './ComparisonBars';
 import StackedBars from './StackedBars';
-import IndividualsView from './IndividualsView';
-import MosaicPlot from './MosaicPlot';
-import Heatmap from './Heatmap';
 import CIPanel from './CIPanel';
 import ForestPlot from './ForestPlot';
 import ExpectedFrequencies from './ExpectedFrequencies';
@@ -33,9 +27,6 @@ import AdvancedPanel from './AdvancedPanel';
 const TABS = [
   { key: 'grupos', label: 'Grupos', icon: BarChart3 },
   { key: 'proporcoes', label: 'Proporções', icon: Percent },
-  { key: 'individuos', label: 'Indivíduos', icon: Users },
-  { key: 'mosaic', label: 'Mosaic', icon: Grid2x2 },
-  { key: 'heatmap', label: 'Heatmap', icon: Flame },
   { key: 'ic', label: 'IC', icon: Sigma },
   { key: 'forest', label: 'Forest', icon: MoveHorizontal },
   { key: 'esperado', label: 'Esperado', icon: Table },
@@ -77,15 +68,6 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
       )}
       {tab === 'proporcoes' && (
         <StackedBars r={r} labels={labels} reduceMotion={reduceMotion} />
-      )}
-      {tab === 'individuos' && (
-        <IndividualsView r={r} labels={labels} reduceMotion={reduceMotion} />
-      )}
-      {tab === 'mosaic' && (
-        <MosaicPlot r={r} labels={labels} reduceMotion={reduceMotion} />
-      )}
-      {tab === 'heatmap' && (
-        <Heatmap r={r} labels={labels} reduceMotion={reduceMotion} />
       )}
       {tab === 'ic' && <CIPanel r={r} labels={labels} />}
       {tab === 'forest' && <ForestPlot r={r} />}
