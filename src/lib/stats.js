@@ -90,6 +90,83 @@ function wilsonCI(x, n, z) {
   return { low: Math.max(0, center - half), high: Math.min(1, center + half) };
 }
 
+// log-fatorial (com cache) para o teste exato de Fisher
+const _lnFactCache = [0];
+function lnFact(n) {
+  while (_lnFactCache.length <= n) {
+    const i = _lnFactCache.length;
+    _lnFactCache.push(_lnFactCache[i - 1] + Math.log(i));
+  }
+  return _lnFactCache[n];
+}
+
+// teste exato de Fisher (2×2) — p bilateral e unilaterais
+function fisherExact(a, b, c, d) {
+  const n = a + b + c + d;
+  const row1 = a + b;
+  const row2 = c + d;
+  const col1 = a + c;
+  const col2 = b + d;
+  if (n === 0) return { twoSided: null, less: null, greater: null };
+  const logP = (k) =>
+    lnFact(row1) + lnFact(row2) + lnFact(col1) + lnFact(col2) - lnFact(n) -
+    lnFact(k) - lnFact(row1 - k) - lnFact(col1 - k) - lnFact(col2 - (row1 - k));
+  const lo = Math.max(0, col1 - row2);
+  const hi = Math.min(row1, col1);
+  const pObs = logP(a);
+  let twoSided = 0;
+  let less = 0;
+  let greater = 0;
+  for (let k = lo; k <= hi; k++) {
+    const lp = logP(k);
+    const p = Math.exp(lp);
+    if (lp <= pObs + 1e-12) twoSided += p;
+    if (k <= a) less += p;
+    if (k >= a) greater += p;
+  }
+  return { twoSided, less, greater };
+}
+
+// G-test (razão de verossimilhanças), df = 1
+function gTest(a, b, c, d, expected) {
+  let G = 0;
+  const cells = [
+    [a, expected.a],
+    [b, expected.b],
+    [c, expected.c],
+    [d, expected.d],
+  ];
+  for (const [o, e] of cells) {
+    if (o > 0 && e !== null && e > 0) G += 2 * o * Math.log(o / e);
+  }
+  return { G, p: gammq(0.5, G / 2) };
+}
+
+// densidade da distribuição qui-quadrado
+export function chi2Pdf(x, df = 1) {
+  if (x <= 0) return 0;
+  const a = df / 2;
+  return (
+    (Math.pow(x, a - 1) * Math.exp(-x / 2)) /
+    (Math.pow(2, a) * Math.exp(lnGamma(a)))
+  );
+}
+
+// quantil (cauda inferior) da qui-quadrado via bisseção
+export function chi2Quantile(df, p) {
+  if (p <= 0) return 0;
+  if (p >= 1) return Infinity;
+  const a = df / 2;
+  let lo = 0;
+  let hi = 1000;
+  for (let i = 0; i < 100; i++) {
+    const mid = (lo + hi) / 2;
+    if (gammp(a, mid / 2) < p) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
 // =============================================================
 // calculate2x2 — função central
 // retorna totais, proporções, medidas, frequências esperadas,
@@ -172,6 +249,15 @@ export function calculate2x2(a, b, c, d) {
     };
   }
 
+  // IC da diferença absoluta (RD)
+  let RDCI = null;
+  if (RD !== null && riskExp !== null && riskUnexp !== null) {
+    const seRD = Math.sqrt(
+      (riskExp * (1 - riskExp)) / row1 + (riskUnexp * (1 - riskUnexp)) / row2
+    );
+    RDCI = { low: RD - z * seRD, high: RD + z * seRD };
+  }
+
   // frequências esperadas sob H0
   const expected = {
     a: safeDiv(row1 * col1, n),
@@ -179,6 +265,10 @@ export function calculate2x2(a, b, c, d) {
     c: safeDiv(row2 * col1, n),
     d: safeDiv(row2 * col2, n),
   };
+
+  // teste exato de Fisher e G-test
+  const fisher = fisherExact(a, b, c, d);
+  const gTestRes = gTest(a, b, c, d, expected);
 
   // contribuições e χ²
   const ca = contrib(a, expected.a);
@@ -245,9 +335,12 @@ export function calculate2x2(a, b, c, d) {
     RD,
     RRCI,
     ORCI,
+    RDCI,
     riskExpCI,
     riskUnexpCI,
     expected,
+    fisher,
+    gTest: gTestRes,
     contributions,
     chi2,
     chi2Yates,
