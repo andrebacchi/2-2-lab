@@ -1,7 +1,7 @@
 import React from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { fmtInt } from '@/lib/format';
-import { rescaleTable } from '@/lib/stats';
+import { rescaleTable, MIN_N } from '@/lib/stats';
 
 function TotalItem({ label, value, sub }) {
   return (
@@ -26,24 +26,26 @@ function NTotalEditor({ values, setValues }) {
   const n = values.a + values.b + values.c + values.d;
   const setN = (newN) => {
     let m = Math.round(Number(newN));
-    if (!Number.isFinite(m) || m < 0) m = 0;
+    if (!Number.isFinite(m) || m < MIN_N) m = MIN_N;
     setValues(rescaleTable(values, m));
   };
   const sliderMax = Math.max(200, Math.ceil((n + 20) / 10) * 10);
+  const atMin = n <= MIN_N;
 
   return (
     <div className="flex flex-col items-center justify-center px-3 py-3 bg-teal-50/70 border border-teal-200 rounded-md">
       <div className="flex items-center gap-1.5">
         <button
           onClick={() => setN(n - 1)}
-          className="w-7 h-7 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors shrink-0"
+          disabled={atMin}
+          className="w-7 h-7 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Diminuir n"
         >
           <Minus className="w-3.5 h-3.5" />
         </button>
         <input
           type="number"
-          min={0}
+          min={MIN_N}
           value={n}
           onChange={(e) => setN(e.target.value)}
           className="w-16 text-center text-xl font-semibold bg-transparent border-b-2 border-transparent focus:border-teal-600 focus:outline-none text-foreground tabular-nums"
@@ -62,7 +64,7 @@ function NTotalEditor({ values, setValues }) {
       </span>
       <input
         type="range"
-        min={0}
+        min={MIN_N}
         max={sliderMax}
         value={Math.min(n, sliderMax)}
         onChange={(e) => setN(e.target.value)}
@@ -70,7 +72,7 @@ function NTotalEditor({ values, setValues }) {
         aria-label="Controle deslizante do total n"
       />
       <span className="text-[10px] text-muted-foreground/80 mt-1">
-        redimensiona proporcional
+        redimensiona proporcional · mínimo {MIN_N}
       </span>
     </div>
   );

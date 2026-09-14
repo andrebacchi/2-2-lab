@@ -353,6 +353,9 @@ export function calculate2x2(a, b, c, d) {
   };
 }
 
+// n mínimo absoluto: a tabela nunca colapsa para tudo-zero, preservando as proporções
+export const MIN_N = 4;
+
 // redimensiona a tabela mantendo as proporções (maior resto) — soma = newN
 export function rescaleTable(values, newN) {
   const a = sanitize(values.a);
@@ -361,8 +364,8 @@ export function rescaleTable(values, newN) {
   const d = sanitize(values.d);
   const n = a + b + c + d;
   let target = Math.round(Number(newN));
-  if (!Number.isFinite(target) || target < 0) target = 0;
-  if (n === 0) return { a: 0, b: 0, c: 0, d: 0 };
+  if (!Number.isFinite(target) || target < MIN_N) target = MIN_N;
+  if (n === 0) return { a: 1, b: 1, c: 1, d: 1 };
   if (target === n) return { a, b, c, d };
 
   const factor = target / n;
