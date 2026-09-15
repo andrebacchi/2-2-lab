@@ -16,7 +16,7 @@ export default function LabHeader({
               2×2 <span className="text-teal-700">LAB</span>
             </h1>
             <p className="text-[11px] text-muted-foreground/80 font-body">
-              Desenvolvido por André Demambre Bacchi
+              Criado por André D. Bacchi
             </p>
           </div>
         </div>
