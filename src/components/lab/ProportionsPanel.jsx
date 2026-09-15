@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeftRight, Info } from 'lucide-react';
+import { ArrowLeftRight } from 'lucide-react';
 import { fmtPct, fmtInt } from '@/lib/format';
 
 const PERSPECTIVES = [
@@ -105,17 +105,6 @@ export default function ProportionsPanel({ r, labels }) {
         })}
       </div>
 
-      {/* 40% de quem? */}
-      <div className="mt-4 flex items-start gap-2 rounded-lg bg-teal-50/50 border border-teal-100 px-3 py-2.5">
-        <Info className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
-        <p className="text-xs text-foreground/80">
-          <span className="font-semibold">40% de quem?</span> O numerador sozinho
-          não define o significado da porcentagem — o denominador define.{' '}
-          {fmtPct(r.proportions.row.a, 0)} pode ser “{fmtInt(r.a)} de{' '}
-          {fmtInt(r.totals.row1)} expostos” ou “{fmtInt(r.a)} de{' '}
-          {fmtInt(r.totals.n)} indivíduos”.
-        </p>
-      </div>
     </section>
   );
 }
