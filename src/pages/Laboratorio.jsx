@@ -11,6 +11,7 @@ import ProductToolbar from '@/components/lab/ProductToolbar';
 import ChallengesModal from '@/components/lab/ChallengesModal';
 import AnalysisDrawer from '@/components/lab/AnalysisDrawer';
 import TeachMode from '@/components/lab/TeachMode';
+import FirstTimeOnboarding from '@/components/lab/FirstTimeOnboarding';
 import { useLabStore } from '@/hooks/useLabStore';
 
 export default function Laboratorio() {
@@ -120,6 +121,7 @@ export default function Laboratorio() {
           onClearHistory={clearHistory}
         />
         <TeachMode open={openTeach} onOpenChange={setOpenTeach} />
+        <FirstTimeOnboarding />
       </main>
     </div>
   );
