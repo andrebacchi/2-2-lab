@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import { Sparkles } from 'lucide-react';
 import { fmt, fmtInt, fmtPct, fmtP, ciText } from '@/lib/format';
 
 // Gera interpretação em linguagem natural conforme o desenho do estudo.
 // Determinística (sem LLM): instantânea, sem custo de créditos e reprodutível.
-function buildInterpretation(type, r, labels) {
+export function buildInterpretation(type, r, labels) {
   const outOfExposure = labels?.outcomeName?.toLowerCase() || 'o desfecho';
   const expName = labels?.expYes || 'expostos';
   const unexpName = labels?.expNo || 'não expostos';
 
   const pVal = r.pPearson;
   const significant = pVal !== null && pVal < 0.05;
-
-  const ciContains = (ci, v) =>
-    ci && ci.low !== null && ci.high !== null && ci.low <= v && v <= ci.high;
 
   // ---- medidas por desenho ----
   const measures = {
@@ -112,32 +107,4 @@ function buildInterpretation(type, r, labels) {
   const text = fn();
   if (!text) return 'Não há dados suficientes para interpretar esta tabela.';
   return text;
-}
-
-export default function InterpretationButton({ type, r, labels }) {
-  const [open, setOpen] = useState(false);
-  const interpretation = open ? buildInterpretation(type, r, labels) : '';
-
-  return (
-    <div className="mt-4">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-foreground text-foreground bg-foreground text-background hover:bg-foreground/90 hover:text-background transition-colors"
-      >
-        <Sparkles className="w-3.5 h-3.5" />
-        {open ? 'Ocultar interpretação' : 'Interpretar resultado'}
-      </button>
-
-      {open && (
-        <div className="mt-3 rounded-lg border border-border bg-card px-4 py-3">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5">
-            Interpretação contextualizada
-          </div>
-          <p className="text-sm text-foreground leading-relaxed">
-            {interpretation}
-          </p>
-        </div>
-      )}
-    </div>
-  );
 }

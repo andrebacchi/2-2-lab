@@ -11,6 +11,7 @@ import {
   Lightbulb,
   Microscope,
   Atom,
+  Sparkles,
 } from 'lucide-react';
 import ComparisonBars from './ComparisonBars';
 import StackedBars from './StackedBars';
@@ -23,6 +24,7 @@ import TestsComparison from './TestsComparison';
 import ExplanationPanel from './ExplanationPanel';
 import StudyContextPanel from './StudyContextPanel';
 import AdvancedPanel from './AdvancedPanel';
+import InterpretationTab from './InterpretationTab';
 
 const TABS = [
   { key: 'grupos', label: 'Grupos', icon: BarChart3 },
@@ -36,9 +38,10 @@ const TABS = [
   { key: 'explicacao', label: 'Explicação', icon: Lightbulb },
   { key: 'contexto', label: 'Contexto', icon: Microscope },
   { key: 'avancado', label: 'Testes diagnósticos', icon: Atom },
+  { key: 'interpretacao', label: 'Interpretação', icon: Sparkles },
 ];
 
-export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
+export default function VisualizationTabs({ r, labels, reduceMotion, values, studyType }) {
   const [tab, setTab] = useState('grupos');
 
   return (
@@ -90,8 +93,11 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
       {tab === 'distribuicao' && <ChiSquareDistribution r={r} />}
       {tab === 'testes' && <TestsComparison r={r} />}
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
-      {tab === 'contexto' && <StudyContextPanel r={r} labels={labels} />}
+      {tab === 'contexto' && <StudyContextPanel r={r} type={studyType} />}
       {tab === 'avancado' && <AdvancedPanel r={r} />}
+      {tab === 'interpretacao' && (
+        <InterpretationTab r={r} labels={labels} studyType={studyType} />
+      )}
     </div>
   );
 }

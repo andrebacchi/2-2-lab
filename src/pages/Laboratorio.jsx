@@ -12,6 +12,8 @@ import ChallengesModal from '@/components/lab/ChallengesModal';
 import AnalysisDrawer from '@/components/lab/AnalysisDrawer';
 import TeachMode from '@/components/lab/TeachMode';
 import FirstTimeOnboarding from '@/components/lab/FirstTimeOnboarding';
+import StudyTypeSelector from '@/components/lab/StudyTypeSelector';
+import ExportReportButton from '@/components/lab/ExportReportButton';
 import { useLabStore } from '@/hooks/useLabStore';
 
 export default function Laboratorio() {
@@ -29,6 +31,7 @@ export default function Laboratorio() {
   const [openChallenges, setOpenChallenges] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
+  const [studyType, setStudyType] = useState('coorte');
   const { history, saved, saveSnapshot, removeSaved, clearHistory } =
     useLabStore(values, labels);
 
@@ -78,6 +81,7 @@ export default function Laboratorio() {
         {/* Layout duas colunas no desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div className="space-y-6">
+            <StudyTypeSelector type={studyType} setType={setStudyType} />
             <ContingencyTable
               values={values}
               setValues={setValues}
@@ -85,6 +89,14 @@ export default function Laboratorio() {
               setLabels={setLabels}
             />
             <TotalsPanel r={r} values={values} setValues={setValues} />
+            <div className="flex justify-center sm:justify-start">
+              <ExportReportButton
+                r={r}
+                values={values}
+                labels={labels}
+                studyType={studyType}
+              />
+            </div>
           </div>
 
           <div className="lg:sticky lg:top-20">
@@ -93,6 +105,7 @@ export default function Laboratorio() {
               values={values}
               labels={labels}
               reduceMotion={reduceMotion}
+              studyType={studyType}
             />
           </div>
         </div>
