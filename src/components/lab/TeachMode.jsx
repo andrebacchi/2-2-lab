@@ -63,7 +63,7 @@ const STEPS = [
     body: 'Escolha o desenho do estudo (coorte, caso-controle, transversal, ensaio clínico). O desenho determina quais medidas são válidas — caso-controle, por exemplo, admite apenas OR; ensaios mostram RRR, RAR e NNT.',
   },
   {
-    title: 'Aba Avançado',
+    title: 'Aba Testes diagnósticos',
     body: 'Módulos de diagnóstico (sensibilidade, especificidade, VPP/VPN e nomograma de Fagan), McNemar (dados pareados), Kappa (concordância), confundimento e estratificação de Mantel-Haenszel.',
   },
   {

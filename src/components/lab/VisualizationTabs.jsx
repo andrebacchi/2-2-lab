@@ -35,7 +35,7 @@ const TABS = [
   { key: 'testes', label: 'Testes', icon: ListChecks },
   { key: 'explicacao', label: 'Explicação', icon: Lightbulb },
   { key: 'contexto', label: 'Contexto', icon: Microscope },
-  { key: 'avancado', label: 'Avançado', icon: Atom },
+  { key: 'avancado', label: 'Testes diagnósticos', icon: Atom },
 ];
 
 export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
