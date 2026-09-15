@@ -3,22 +3,24 @@ import CellControl from './CellControl';
 import { fmtInt } from '@/lib/format';
 
 const TotalCell = ({ value, label }) => (
-  <div className="tot-flash flex flex-col items-center justify-center px-1 py-2 bg-muted/60 rounded-md min-w-[42px]">
-    <span className="text-base sm:text-xl font-semibold tabular-nums text-foreground">
+  <div className="tot-flash flex flex-col items-center justify-center px-0.5 py-1.5 bg-muted/60 rounded-md">
+    <span className="text-sm sm:text-lg font-semibold tabular-nums text-foreground">
       {fmtInt(value)}
     </span>
     {label && (
-      <span className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
+      <span className="text-[8px] uppercase tracking-wider text-muted-foreground mt-0.5">
         {label}
       </span>
     )}
   </div>
 );
 
-const LABEL_INPUT =
-  'font-display text-[11px] sm:text-sm font-medium text-center bg-transparent border-b border-dashed border-border focus:border-teal-600 focus:outline-none px-1 py-0.5 rounded text-foreground w-full';
+const NAME_INPUT =
+  'font-display text-[13px] sm:text-sm font-medium text-center bg-transparent border-b border-dashed border-border focus:border-teal-600 focus:outline-none px-1 py-0.5 rounded text-foreground w-full';
 
-const CELL = 'flex items-center justify-center min-w-0 py-2 px-1 rounded-md border border-border/60';
+// Células editáveis: retângulos horizontais (largas e baixas)
+const CELL =
+  'flex items-center justify-center min-w-0 py-1.5 px-0.5 rounded-md border border-border/60';
 
 export default function ContingencyTable({
   values,
@@ -50,32 +52,40 @@ export default function ContingencyTable({
         </span>
       </div>
 
-      <div className="grid grid-cols-[minmax(56px,auto)_1fr_1fr_minmax(40px,auto)] gap-1.5 sm:gap-2">
-        {/* Nomes das variáveis (editáveis) */}
-        <div className="flex items-end justify-center pb-1">
+      {/* Nomes das variáveis (editáveis) — fora da grade, com fonte maior */}
+      <div className="flex items-stretch justify-center gap-4 sm:gap-6 mb-3 sm:mb-4">
+        <div className="flex flex-col items-center gap-0.5">
           <input
             value={labels.exposureName}
             onChange={setLabel('exposureName')}
-            className={LABEL_INPUT}
+            className={NAME_INPUT}
             aria-label="Nome da variável exposição"
           />
+          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">
+            linhas
+          </span>
         </div>
-        <div className="col-span-2 flex items-end justify-center pb-1">
+        <span className="self-center text-muted-foreground text-sm">×</span>
+        <div className="flex flex-col items-center gap-0.5">
           <input
             value={labels.outcomeName}
             onChange={setLabel('outcomeName')}
-            className={LABEL_INPUT}
+            className={NAME_INPUT}
             aria-label="Nome da variável desfecho"
           />
+          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">
+            colunas
+          </span>
         </div>
-        <div />
+      </div>
 
-        {/* Sub-cabeçalho Sim / Não */}
+      <div className="grid grid-cols-[minmax(2rem,auto)_1fr_1fr_minmax(2.2rem,auto)] gap-1.5 sm:gap-2">
+        {/* Sub-cabeçalho Sim / Não / Total */}
         <div />
-        <div className="text-center text-xs sm:text-sm font-medium text-muted-foreground">
+        <div className="text-center text-[11px] sm:text-xs font-medium text-muted-foreground">
           {labels.outYes}
         </div>
-        <div className="text-center text-xs sm:text-sm font-medium text-muted-foreground">
+        <div className="text-center text-[11px] sm:text-xs font-medium text-muted-foreground">
           {labels.outNo}
         </div>
         <div className="text-center text-[9px] uppercase tracking-wider text-muted-foreground self-center">
@@ -83,7 +93,7 @@ export default function ContingencyTable({
         </div>
 
         {/* Linha Exposição Sim */}
-        <div className="flex items-center justify-center text-xs sm:text-sm font-medium text-muted-foreground text-center">
+        <div className="flex items-center justify-center text-[11px] sm:text-xs font-medium text-muted-foreground text-center">
           {labels.expYes}
         </div>
         <div className={CELL}>
@@ -95,7 +105,7 @@ export default function ContingencyTable({
         <TotalCell value={t.row1} />
 
         {/* Linha Exposição Não */}
-        <div className="flex items-center justify-center text-xs sm:text-sm font-medium text-muted-foreground text-center">
+        <div className="flex items-center justify-center text-[11px] sm:text-xs font-medium text-muted-foreground text-center">
           {labels.expNo}
         </div>
         <div className={CELL}>
