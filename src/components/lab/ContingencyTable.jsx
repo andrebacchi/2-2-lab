@@ -3,7 +3,7 @@ import CellControl from './CellControl';
 import { fmtInt } from '@/lib/format';
 
 const TotalCell = ({ value, label }) => (
-  <div className="tot-flash flex flex-col items-center justify-center px-1 py-2 bg-muted/50 rounded-md min-w-[42px]">
+  <div className="tot-flash flex flex-col items-center justify-center px-1 py-2 bg-muted/60 rounded-md min-w-[42px]">
     <span className="text-base sm:text-xl font-semibold tabular-nums text-foreground">
       {fmtInt(value)}
     </span>
@@ -17,6 +17,8 @@ const TotalCell = ({ value, label }) => (
 
 const LABEL_INPUT =
   'font-display text-[11px] sm:text-sm font-medium text-center bg-transparent border-b border-dashed border-border focus:border-teal-600 focus:outline-none px-1 py-0.5 rounded text-foreground w-full';
+
+const CELL = 'flex items-center justify-center py-2 px-1 rounded-md border border-border/60';
 
 export default function ContingencyTable({
   values,
@@ -48,29 +50,23 @@ export default function ContingencyTable({
         </span>
       </div>
 
-      <div className="grid grid-cols-[minmax(48px,auto)_1fr_1fr_minmax(40px,auto)] gap-1.5 sm:gap-2">
-        {/* Cabeçalho: nomes das variáveis */}
-        <div className="flex flex-col items-center justify-end pb-1">
+      <div className="grid grid-cols-[minmax(56px,auto)_1fr_1fr_minmax(40px,auto)] gap-1.5 sm:gap-2">
+        {/* Nomes das variáveis (editáveis) */}
+        <div className="flex items-end justify-center pb-1">
           <input
             value={labels.exposureName}
             onChange={setLabel('exposureName')}
             className={LABEL_INPUT}
             aria-label="Nome da variável exposição"
           />
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
-            Exposição
-          </div>
         </div>
-        <div className="col-span-2 text-center">
+        <div className="col-span-2 flex items-end justify-center pb-1">
           <input
             value={labels.outcomeName}
             onChange={setLabel('outcomeName')}
             className={LABEL_INPUT}
             aria-label="Nome da variável desfecho"
           />
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
-            Desfecho
-          </div>
         </div>
         <div />
 
@@ -90,10 +86,10 @@ export default function ContingencyTable({
         <div className="flex items-center justify-center text-xs sm:text-sm font-medium text-muted-foreground text-center">
           {labels.expYes}
         </div>
-        <div className="flex items-center justify-center py-2 px-1 rounded-md bg-teal-50/60 border border-teal-100">
+        <div className={CELL}>
           <CellControl value={a} onChange={set('a')} accent="teal" />
         </div>
-        <div className="flex items-center justify-center py-2 px-1 rounded-md bg-slate-50 border border-slate-100">
+        <div className={CELL}>
           <CellControl value={b} onChange={set('b')} accent="slate" />
         </div>
         <TotalCell value={t.row1} />
@@ -102,10 +98,10 @@ export default function ContingencyTable({
         <div className="flex items-center justify-center text-xs sm:text-sm font-medium text-muted-foreground text-center">
           {labels.expNo}
         </div>
-        <div className="flex items-center justify-center py-2 px-1 rounded-md bg-teal-50/60 border border-teal-100">
+        <div className={CELL}>
           <CellControl value={c} onChange={set('c')} accent="teal" />
         </div>
-        <div className="flex items-center justify-center py-2 px-1 rounded-md bg-slate-50 border border-slate-100">
+        <div className={CELL}>
           <CellControl value={d} onChange={set('d')} accent="slate" />
         </div>
         <TotalCell value={t.row2} />
