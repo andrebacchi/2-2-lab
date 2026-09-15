@@ -15,24 +15,60 @@ const STEPS = [
     body: 'Um laboratório para explorar tabelas de contingência 2×2. Você manipula quatro números (a, b, c, d) e vê, em tempo real, todas as estatísticas e visualizações derivarem deles.',
   },
   {
-    title: 'A tabela 2×2',
-    body: 'As linhas costumam representar a exposição e as colunas o desfecho. "a" = expostos com desfecho, "d" = não expostos sem desfecho. Edite os valores ou os rótulos diretamente nas células.',
+    title: 'Cabeçalho e acessibilidade',
+    body: 'No topo ficam o título do app e o crédito do autor. Os botões "Reduzir animações" e "Alto contraste" ajustam a interface para maior conforto visual.',
   },
   {
-    title: 'Medidas de associação',
-    body: 'Os cartões de resumo mostram RR (risco relativo), OR (odds ratio) e RD (diferença de risco), cada um com seu IC 95%. Veja também a aba "Grupos" para comparar as proporções graficamente.',
+    title: 'Exemplos pré-definidos',
+    body: 'A barra de exemplos carrega cenários prontos (associação forte, nula, protetora etc.) para você partir de um ponto conhecido antes de explorar.',
   },
   {
-    title: 'Incerteza e inferência',
-    body: 'As abas "IC", "χ²" e "Distribuição" mostram os intervalos de confiança e os testes de hipótese. O p-valor mede a evidência contra H0 (sem associação).',
+    title: 'Cartões de resumo',
+    body: 'Logo abaixo da tabela, os cartões mostram N (total), P(desfecho|expostos), P(desfecho|não expostos), RR/OR com seus IC 95% — o essencial num relance.',
   },
   {
-    title: 'Contexto do estudo',
-    body: 'A aba "Contexto" deixa você escolher o desenho (coorte, caso-controle, transversal, ensaio). O desenho determina qual medida é válida — caso-controle, por exemplo, só admite OR.',
+    title: 'Tabela de contingência',
+    body: 'As linhas representam a exposição e as colunas o desfecho: "a" = expostos com desfecho, "d" = não expostos sem desfecho. Toque em qualquer número para digitá-lo; os rótulos das variáveis também são editáveis.',
   },
   {
-    title: 'Explore',
-    body: 'Use "Desafios" para testar seu entendimento, "Análises" para salvar e revisar tabelas, e "Modo foco" para eliminar distrações. Bom estudo!',
+    title: 'Totais e redimensionamento',
+    body: 'O painel de totais mostra expostos, não expostos, com/sem desfecho. Alterar o total n redimensiona a tabela preservando as proporções entre as células.',
+  },
+  {
+    title: 'Aba Grupos',
+    body: 'Barras que comparam o risco (proporção com desfecho) entre expostos e não expostos, com opção de valores absolutos ou percentuais e IC 95%. Permite ver a diferença visualmente.',
+  },
+  {
+    title: 'Aba Proporções',
+    body: 'Painel que mostra cada célula como proporção, com seletor de perspectiva (por linha, por coluna ou pelo total). A mesma célula responde a perguntas diferentes conforme o denominador.',
+  },
+  {
+    title: 'Aba IC e Forest',
+    body: '"IC" exibe os intervalos de confiança de RR, OR e RD; "Forest" mostra o gráfico em floresta (forest plot) com a estimativa central e os limites do IC.',
+  },
+  {
+    title: 'Aba Esperado e χ²',
+    body: '"Esperado" mostra as frequências esperadas sob a hipótese nula; "χ²" apresenta o teste qui-quadrado de Pearson com as contribuições de cada célula.',
+  },
+  {
+    title: 'Aba Distribuição e Testes',
+    body: '"Distribuição" desenha a curva do χ² com a estatística observada; "Testes" compara Pearson, Yates (correção de continuidade), G-test (razão de verossimilhanças) e Fisher exato.',
+  },
+  {
+    title: 'Aba Explicação',
+    body: 'Resíduos padronizados (quais células fogem do esperado) e uma análise de sensibilidade do p-valor em relação ao tamanho amostral n.',
+  },
+  {
+    title: 'Aba Contexto',
+    body: 'Escolha o desenho do estudo (coorte, caso-controle, transversal, ensaio clínico). O desenho determina quais medidas são válidas — caso-controle, por exemplo, admite apenas OR; ensaios mostram RRR, RAR e NNT.',
+  },
+  {
+    title: 'Aba Avançado',
+    body: 'Módulos de diagnóstico (sensibilidade, especificidade, VPP/VPN e nomograma de Fagan), McNemar (dados pareados), Kappa (concordância), confundimento e estratificação de Mantel-Haenszel.',
+  },
+  {
+    title: 'Ferramentas e fim',
+    body: '"Desafios" propõe objetivos para testar seu entendimento; "Análises" salva tabelas e mantém um histórico; "Modo foco" oculta elementos periféricos. Bom estudo!',
   },
 ];
 
@@ -48,7 +84,7 @@ export default function TeachMode({ open, onOpenChange }) {
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-teal-700" /> Modo aula
+            <BookOpen className="w-4 h-4 text-teal-700" /> Como usar este aplicativo
           </DialogTitle>
           <DialogDescription>
             Passo {i + 1} de {STEPS.length}

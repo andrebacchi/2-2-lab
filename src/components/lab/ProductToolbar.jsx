@@ -19,8 +19,11 @@ export default function ProductToolbar({
       <button className={BTN} onClick={onDrawer}>
         <History className="w-3.5 h-3.5" /> Análises
       </button>
-      <button className={BTN} onClick={onTeach}>
-        <BookOpen className="w-3.5 h-3.5" /> Aula
+      <button
+        className={`${BTN} bg-foreground text-background border-foreground hover:bg-foreground/90 hover:text-background`}
+        onClick={onTeach}
+      >
+        <BookOpen className="w-3.5 h-3.5" /> Como usar este aplicativo
       </button>
       <button className={BTN} onClick={onToggleFocus}>
         {focus ? (
