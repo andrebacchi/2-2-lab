@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bookmark, History, BookOpen } from 'lucide-react';
+import AddToHomeScreenButton from './AddToHomeScreenButton';
 
 const BTN =
   'flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors whitespace-nowrap';
@@ -19,6 +20,7 @@ export default function ProductToolbar({ onSave, onDrawer, onTeach }) {
       <button className={BTN} onClick={onTeach}>
         <BookOpen className="w-3.5 h-3.5" /> Como usar
       </button>
+      <AddToHomeScreenButton />
     </div>
   );
 }

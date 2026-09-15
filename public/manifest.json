@@ -1,0 +1,19 @@
+{
+  "name": "2×2 LAB — Laboratório de tabelas 2×2",
+  "short_name": "2×2 LAB",
+  "description": "Laboratório interativo para exploração de tabelas de contingência 2×2, estatística epidemiológica e inferência.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fbfaf7",
+  "theme_color": "#0f4c4c",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
