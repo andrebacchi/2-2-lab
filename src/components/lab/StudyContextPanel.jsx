@@ -10,6 +10,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { fmt, fmtInt, fmtPct, ciText } from '@/lib/format';
+import InterpretationButton from './InterpretationButton';
 
 const STUDY_TYPES = {
   coorte: {
@@ -112,7 +113,7 @@ const STATUS = {
   },
 };
 
-export default function StudyContextPanel({ r }) {
+export default function StudyContextPanel({ r, labels }) {
   const [type, setType] = useState('coorte');
   const study = STUDY_TYPES[type];
   const Icon = study.icon;
@@ -173,6 +174,8 @@ export default function StudyContextPanel({ r }) {
           </div>
         </div>
       )}
+
+      <InterpretationButton type={type} r={r} labels={labels} />
 
       <div className="space-y-2">
         {study.measures.map((m) => {

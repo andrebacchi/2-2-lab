@@ -90,7 +90,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values }) {
       {tab === 'distribuicao' && <ChiSquareDistribution r={r} />}
       {tab === 'testes' && <TestsComparison r={r} />}
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
-      {tab === 'contexto' && <StudyContextPanel r={r} />}
+      {tab === 'contexto' && <StudyContextPanel r={r} labels={labels} />}
       {tab === 'avancado' && <AdvancedPanel r={r} />}
     </div>
   );
