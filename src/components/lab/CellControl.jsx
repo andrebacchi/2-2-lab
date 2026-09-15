@@ -21,10 +21,11 @@ export default function CellControl({ value, onChange, accent = 'teal' }) {
       type="text"
       inputMode="numeric"
       pattern="[0-9]*"
+      size={1}
       value={value}
       onChange={(e) => set(e.target.value)}
       onFocus={(e) => e.target.select()}
-      className={`w-full text-center text-xl sm:text-2xl font-semibold bg-transparent focus:outline-none focus:ring-2 ${ring} rounded text-foreground tabular-nums px-1 py-1 min-w-0`}
+      className={`w-full text-center text-lg sm:text-xl font-semibold bg-transparent focus:outline-none focus:ring-2 ${ring} rounded text-foreground tabular-nums px-1 py-1 min-w-0`}
       aria-label="Valor da célula"
     />
   );
