@@ -25,7 +25,6 @@ export default function Laboratorio() {
   });
   const [reduceMotion, setReduceMotion] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
-  const [focus, setFocus] = useState(false);
   const [openChallenges, setOpenChallenges] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
@@ -61,18 +60,14 @@ export default function Laboratorio() {
         setHighContrast={setHighContrast}
       />
 
-      <main className={`max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6 ${focus ? 'focus-mode' : ''}`}>
+      <main className="max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6">
         {/* Subtítulo / frase */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="focus-hide">
-            <PresetBar onLoad={loadPreset} />
-          </div>
+          <PresetBar onLoad={loadPreset} />
           <ProductToolbar
             onChallenges={() => setOpenChallenges(true)}
             onDrawer={() => setOpenDrawer(true)}
             onTeach={() => setOpenTeach(true)}
-            focus={focus}
-            onToggleFocus={() => setFocus((f) => !f)}
           />
         </div>
 
@@ -102,11 +97,9 @@ export default function Laboratorio() {
         </div>
 
         {/* Proporções — abaixo, full width */}
-        <div className="focus-hide">
-          <ProportionsPanel r={r} labels={labels} />
-        </div>
+        <ProportionsPanel r={r} labels={labels} />
 
-        <footer className="focus-hide pt-6 pb-10 text-center text-xs text-muted-foreground">
+        <footer className="pt-6 pb-10 text-center text-xs text-muted-foreground">
           2×2 LAB — um laboratório educacional para exploração de tabelas de
           contingência 2×2, associação e inferência estatística.
         </footer>
