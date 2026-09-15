@@ -18,7 +18,7 @@ const TotalCell = ({ value, label }) => (
 const LABEL_INPUT =
   'font-display text-[11px] sm:text-sm font-medium text-center bg-transparent border-b border-dashed border-border focus:border-teal-600 focus:outline-none px-1 py-0.5 rounded text-foreground w-full';
 
-const CELL = 'flex items-center justify-center py-2 px-1 rounded-md border border-border/60';
+const CELL = 'flex items-center justify-center min-w-0 py-2 px-1 rounded-md border border-border/60';
 
 export default function ContingencyTable({
   values,
