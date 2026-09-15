@@ -8,8 +8,8 @@ import TotalsPanel from '@/components/lab/TotalsPanel';
 import ProportionsPanel from '@/components/lab/ProportionsPanel';
 import VisualizationTabs from '@/components/lab/VisualizationTabs';
 import ProductToolbar from '@/components/lab/ProductToolbar';
-import ChallengesModal from '@/components/lab/ChallengesModal';
 import AnalysisDrawer from '@/components/lab/AnalysisDrawer';
+import { useToast } from '@/components/ui/use-toast';
 import TeachMode from '@/components/lab/TeachMode';
 import FirstTimeOnboarding from '@/components/lab/FirstTimeOnboarding';
 import StudyTypeSelector from '@/components/lab/StudyTypeSelector';
@@ -28,10 +28,10 @@ export default function Laboratorio() {
   });
   const [reduceMotion, setReduceMotion] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
-  const [openChallenges, setOpenChallenges] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
   const [studyType, setStudyType] = useState('coorte');
+  const { toast } = useToast();
   const { history, saved, saveSnapshot, removeSaved, clearHistory } =
     useLabStore(values, labels);
 
@@ -69,7 +69,17 @@ export default function Laboratorio() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <PresetBar onLoad={loadPreset} />
           <ProductToolbar
-            onChallenges={() => setOpenChallenges(true)}
+            onSave={() => {
+              const name = `Análise ${new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}`;
+              saveSnapshot(name);
+              toast({
+                title: 'Análise salva',
+                description: `${name} · ${values.a + values.b + values.c + values.d} indivíduos`,
+              });
+            }}
             onDrawer={() => setOpenDrawer(true)}
             onTeach={() => setOpenTeach(true)}
           />
@@ -118,11 +128,6 @@ export default function Laboratorio() {
           contingência 2×2, associação e inferência estatística.
         </footer>
 
-        <ChallengesModal
-          open={openChallenges}
-          onOpenChange={setOpenChallenges}
-          r={r}
-        />
         <AnalysisDrawer
           open={openDrawer}
           onOpenChange={setOpenDrawer}

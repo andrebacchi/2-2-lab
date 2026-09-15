@@ -68,7 +68,7 @@ const STEPS = [
   },
   {
     title: 'Ferramentas e fim',
-    body: '"Desafios" propõe objetivos para testar seu entendimento; "Análises" salva tabelas e mantém um histórico; "Modo foco" oculta elementos periféricos. Bom estudo!',
+    body: '"Salvar análise" guarda a tabela atual com um nome automático; "Análises" mostra o histórico e as análises salvas para restaurar depois. Bom estudo!',
   },
 ];
 
