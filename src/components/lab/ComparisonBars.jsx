@@ -12,7 +12,7 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
     {
       key: 'exp',
       label: labels.exposureName ? `${labels.expYes} — ${labels.exposureName}` : 'Expostos',
-      sub: `Desfecho: ${labels.outYes}`,
+      sub: `${labels.outcomeName || 'Desfecho'}: ${labels.outYes}`,
       abs: r.a,
       pct: r.riskExp,
       total: r.totals.row1,
@@ -22,7 +22,7 @@ export default function ComparisonBars({ r, labels, reduceMotion }) {
     {
       key: 'unexp',
       label: labels.exposureName ? `${labels.expNo} — ${labels.exposureName}` : 'Não expostos',
-      sub: `Desfecho: ${labels.outYes}`,
+      sub: `${labels.outcomeName || 'Desfecho'}: ${labels.outYes}`,
       abs: r.c,
       pct: r.riskUnexp,
       total: r.totals.row2,
