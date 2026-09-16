@@ -12,59 +12,55 @@ import { ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 const STEPS = [
   {
     title: 'Bem-vindo ao 2×2 LAB',
-    body: 'Um laboratório para explorar tabelas de contingência 2×2. Você manipula quatro números (a, b, c, d) e vê, em tempo real, todas as estatísticas e visualizações derivarem deles.',
+    body: 'Um laboratório para explorar tabelas de contingência 2×2. Você manipula quatro números (a, b, c, d) e vê, em tempo real, todas as estatísticas e visualizações derivarem deles — pensado para uso em aulas de epidemiologia, inclusive no celular.',
   },
   {
     title: 'Cabeçalho e acessibilidade',
-    body: 'No topo ficam o título do app e o crédito do autor. Os botões "Reduzir animações" e "Alto contraste" ajustam a interface para maior conforto visual.',
+    body: 'No topo ficam o título do app. O botão "Alto contraste" ajusta a interface para maior conforto visual; ao lado estão as ferramentas (Salvar análise, Análises e este guia).',
   },
   {
     title: 'Exemplos pré-definidos',
-    body: 'A barra de exemplos carrega cenários prontos (associação forte, nula, protetora etc.) para você partir de um ponto conhecido antes de explorar.',
+    body: 'Logo no início da coluna principal, a barra de exemplos carrega cenários prontos (zerar, associação forte, nula, protetora etc.) para você partir de um ponto conhecido antes de explorar.',
   },
   {
-    title: 'Cartões de resumo',
-    body: 'Logo abaixo da tabela, os cartões mostram N (total), P(desfecho|expostos), P(desfecho|não expostos), RR/OR com seus IC 95% — o essencial num relance.',
+    title: 'Desenho do estudo',
+    body: 'Abaixo dos exemplos, escolha o desenho: coorte, caso-controle, transversal ou ensaio clínico. O desenho determina quais medidas são válidas — ao escolher caso-controle, por exemplo, a interface já sinaliza que OR é a medida correta e RR não se aplica.',
   },
   {
     title: 'Tabela de contingência',
     body: 'As linhas representam a exposição e as colunas o desfecho: "a" = expostos com desfecho, "d" = não expostos sem desfecho. Toque em qualquer número para digitá-lo; os rótulos das variáveis também são editáveis.',
   },
   {
+    title: 'Cartões de resumo',
+    body: 'Logo abaixo da tabela, os cartões mostram N (total), P(desfecho|expostos), P(desfecho|não expostos), RR/OR com IC 95%. Cada medida traz um selo — Recomendada, Possível ou Não aplicável — conforme o desenho selecionado, reforçando a lição central de qual medida usar.',
+  },
+  {
     title: 'Totais e redimensionamento',
     body: 'O painel de totais mostra expostos, não expostos, com/sem desfecho. Alterar o total n redimensiona a tabela preservando as proporções entre as células.',
   },
   {
-    title: 'Aba Grupos',
-    body: 'Barras que comparam o risco (proporção com desfecho) entre expostos e não expostos, com opção de valores absolutos ou percentuais e IC 95%. Permite ver a diferença visualmente.',
+    title: 'Painel de Proporções',
+    body: 'Abaixo da tabela, em largura total, o painel mostra cada célula como proporção, com seletor de perspectiva (por linha, por coluna ou pelo total). A mesma célula responde a perguntas diferentes conforme o denominador.',
   },
   {
-    title: 'Aba Proporções',
-    body: 'Painel que mostra cada célula como proporção, com seletor de perspectiva (por linha, por coluna ou pelo total). A mesma célula responde a perguntas diferentes conforme o denominador.',
+    title: 'Visualizações em 3 eixos',
+    body: 'Ao lado da tabela, as visualizações estão organizadas em três eixos de alto nível: Associação, Inferência e Aplicação clínica. Escolha o eixo e, dentro dele, a opção desejada — bem mais fácil de navegar no celular.',
   },
   {
-    title: 'Aba IC e Forest',
-    body: '"IC" exibe os intervalos de confiança de RR, OR e RD; "Forest" mostra o gráfico em floresta (forest plot) com a estimativa central e os limites do IC.',
+    title: 'Eixo Associação',
+    body: 'Grupos (barras comparando o risco entre expostos e não expostos), IC (intervalos de confiança de RR, OR e RD) e Forest (gráfico em floresta com a estimativa central e os limites do IC).',
   },
   {
-    title: 'Aba Esperado e χ²',
-    body: '"Esperado" mostra as frequências esperadas sob a hipótese nula; "χ²" apresenta o teste qui-quadrado de Pearson com as contribuições de cada célula.',
+    title: 'Eixo Inferência',
+    body: 'Esperado (frequências esperadas sob a hipótese nula), χ² (Pearson com contribuições de cada célula), Distribuição (curva do χ² com a estatística observada), Testes (Pearson, Yates, G-test e Fisher) e Explicação (resíduos padronizados e sensibilidade do p-valor em relação ao n).',
   },
   {
-    title: 'Aba Distribuição e Testes',
-    body: '"Distribuição" desenha a curva do χ² com a estatística observada; "Testes" compara Pearson, Yates (correção de continuidade), G-test (razão de verossimilhanças) e Fisher exato.',
+    title: 'Eixo Aplicação clínica',
+    body: 'Interpretação (leitura em linguagem natural já contextualizada pelo desenho, com a medida recomendada e a validade de cada medida) e Testes diagnósticos (sensibilidade, especificidade, VPP/VPN, nomograma de Fagan, McNemar, Kappa, confundimento e Mantel-Haenszel).',
   },
   {
-    title: 'Aba Explicação',
-    body: 'Resíduos padronizados (quais células fogem do esperado) e uma análise de sensibilidade do p-valor em relação ao tamanho amostral n.',
-  },
-  {
-    title: 'Aba Contexto',
-    body: 'Escolha o desenho do estudo (coorte, caso-controle, transversal, ensaio clínico). O desenho determina quais medidas são válidas — caso-controle, por exemplo, admite apenas OR; ensaios mostram RRR, RAR e NNT.',
-  },
-  {
-    title: 'Aba Testes diagnósticos',
-    body: 'Módulos de diagnóstico (sensibilidade, especificidade, VPP/VPN e nomograma de Fagan), McNemar (dados pareados), Kappa (concordância), confundimento e estratificação de Mantel-Haenszel.',
+    title: 'Exportar relatório',
+    body: 'O botão "Exportar" gera um PDF paginado com a tabela formatada, o gráfico de grupos e o resumo estatístico com a interpretação — pronto para entregar ou discutir em sala.',
   },
   {
     title: 'Ferramentas e fim',
