@@ -405,7 +405,7 @@ export function rescaleTable(values, newN) {
 }
 
 export const PRESETS = [
-  { key: 'inicio', name: 'Inicial', a: 40, b: 60, c: 20, d: 80 },
+  { key: 'zerar', name: 'Zerar', a: 0, b: 0, c: 0, d: 0 },
   { key: 'sem_assoc', name: 'Sem associação', a: 50, b: 50, c: 50, d: 50 },
   { key: 'pos_fraca', name: 'Associação positiva fraca', a: 45, b: 55, c: 35, d: 65 },
   { key: 'pos_forte', name: 'Associação positiva forte', a: 70, b: 30, c: 20, d: 80 },
