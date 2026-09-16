@@ -61,9 +61,8 @@ export default function Laboratorio() {
       />
 
       <main className="max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6">
-        {/* Subtítulo / frase */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <PresetBar onLoad={loadPreset} />
+        {/* Ferramentas */}
+        <div className="flex justify-end">
           <ProductToolbar
             onSave={() => {
               const name = `Análise ${new Date().toLocaleTimeString('pt-BR', {
@@ -84,6 +83,7 @@ export default function Laboratorio() {
         {/* Layout duas colunas no desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div className="space-y-6">
+            <PresetBar onLoad={loadPreset} />
             <StudyTypeSelector type={studyType} setType={setStudyType} />
             <ContingencyTable
               values={values}
