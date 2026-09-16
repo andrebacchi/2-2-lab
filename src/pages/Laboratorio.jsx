@@ -91,7 +91,7 @@ export default function Laboratorio() {
               labels={labels}
               setLabels={setLabels}
             />
-            <SummaryCards r={r} />
+            <SummaryCards r={r} studyType={studyType} />
             <TotalsPanel r={r} values={values} setValues={setValues} />
             <div className="flex justify-center sm:justify-start">
               <ExportReportButton
