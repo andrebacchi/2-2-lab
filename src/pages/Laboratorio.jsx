@@ -17,7 +17,7 @@ import ExportReportButton from '@/components/lab/ExportReportButton';
 import { useLabStore } from '@/hooks/useLabStore';
 
 export default function Laboratorio() {
-  const [values, setValues] = useState({ a: 40, b: 60, c: 20, d: 80 });
+  const [values, setValues] = useState({ a: 0, b: 0, c: 0, d: 0 });
   const [labels, setLabels] = useState({
     exposureName: 'Exposição',
     outcomeName: 'Desfecho',
