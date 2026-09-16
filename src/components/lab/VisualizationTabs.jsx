@@ -77,7 +77,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
   return (
     <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
       {/* Eixo temático (3 escolhas de alto nível) */}
-      <div className="flex items-center gap-1 mb-3 overflow-x-auto pb-1">
+      <div className="flex items-center gap-1 mb-3 overflow-x-auto no-scrollbar pb-1">
         {GROUPS.map((g) => (
           <button
             key={g.key}
@@ -94,7 +94,19 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
       </div>
 
       {/* Sub-abas do eixo ativo */}
-      <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
+      <select
+        value={tab}
+        onChange={(e) => setTab(e.target.value)}
+        className="sm:hidden w-full text-sm border border-border rounded-md px-3 py-2 bg-card mb-3 text-foreground"
+        aria-label="Selecionar visualização"
+      >
+        {subTabs.map((t) => (
+          <option key={t.key} value={t.key}>
+            {t.label}
+          </option>
+        ))}
+      </select>
+      <div className="hidden sm:flex items-center gap-1 mb-5 overflow-x-auto no-scrollbar pb-1">
         {subTabs.map((t) => {
           const Icon = t.icon;
           return (
