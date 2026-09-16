@@ -29,9 +29,12 @@ export function buildInterpretation(type, r, labels) {
         ? `O IC 95% [${ci}] não inclui 1 e p = ${fmtP(pVal)}, indicando associação estatisticamente significativa.`
         : `O IC 95% [${ci}] inclui 1 e p = ${fmtP(pVal)}: sem evidência de associação. Pode ser falta de poder.`;
       const rd = r.RD !== null
-        ? ` A diferença absoluta de risco é de ${fmtPct(Math.abs(r.RD), 1)} ${r.RD >= 0 ? 'a mais' : 'a menos'} nos expostos.`
+        ? ` A diferença absoluta de risco (RA) é de ${fmtPct(Math.abs(r.RD), 1)} ${r.RD >= 0 ? 'a mais' : 'a menos'} nos expostos.`
         : '';
-      return `${frase} ${infer}${rd}`;
+      const rap = r.RAP !== null
+        ? ` Risco atribuível à população (RAP) = ${fmtPct(r.RAP, 1)} — parcela do risco na população devida à exposição.`
+        : '';
+      return `${frase} ${infer}${rd}${rap}`;
     },
     caso_controle: () => {
       if (r.OR === null) return null;

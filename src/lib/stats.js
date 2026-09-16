@@ -263,6 +263,15 @@ export function calculate2x2(a, b, c, d) {
     RDCI = { low: RD - z * seRD, high: RD + z * seRD };
   }
 
+  // Risco atribuível à população (RAP = RA × prevalência de exposição)
+  // RA = RD (diferença absoluta de risco nos expostos)
+  const Pe = safeDiv(row1, n);
+  const RAP = RD !== null && Pe !== null ? Pe * RD : null;
+  const RAPCI =
+    RDCI !== null && Pe !== null
+      ? { low: Pe * RDCI.low, high: Pe * RDCI.high }
+      : null;
+
   // frequências esperadas sob H0
   const expected = {
     a: safeDiv(row1 * col1, n),
@@ -341,6 +350,8 @@ export function calculate2x2(a, b, c, d) {
     RRCI,
     ORCI,
     RDCI,
+    RAP,
+    RAPCI,
     riskExpCI,
     riskUnexpCI,
     expected,

@@ -12,6 +12,10 @@ function measureValue(key, r) {
       return { val: r.RR, ci: r.RRCI, label: 'RP' };
     case 'RD':
       return { val: r.RD, ci: r.RDCI, label: 'RD' };
+    case 'RA':
+      return { val: r.RD, ci: r.RDCI, label: 'RA' };
+    case 'RAP':
+      return { val: r.RAP, ci: r.RAPCI, label: 'RAP' };
     case 'OR':
       return { val: r.OR, ci: r.ORCI, label: 'OR' };
     case 'RRR':
@@ -31,7 +35,13 @@ function measureValue(key, r) {
 function formatVal(mv) {
   if (mv.val === null) return '—';
   if (mv.label === 'NNT') return fmtInt(mv.val);
-  if (mv.label === 'RRR' || mv.label === 'RAR') return fmtPct(mv.val, 1);
+  if (
+    mv.label === 'RRR' ||
+    mv.label === 'RAR' ||
+    mv.label === 'RA' ||
+    mv.label === 'RAP'
+  )
+    return fmtPct(mv.val, 1);
   return fmt(mv.val, 2);
 }
 
