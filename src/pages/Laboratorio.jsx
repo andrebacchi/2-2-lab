@@ -62,7 +62,7 @@ export default function Laboratorio() {
 
       <main className="max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6">
         {/* Ferramentas */}
-        <div className="flex justify-end">
+        <div className="flex justify-end items-center gap-2 flex-wrap">
           <ProductToolbar
             onSave={() => {
               const name = `Análise ${new Date().toLocaleTimeString('pt-BR', {
@@ -77,6 +77,12 @@ export default function Laboratorio() {
             }}
             onDrawer={() => setOpenDrawer(true)}
             onTeach={() => setOpenTeach(true)}
+          />
+          <ExportReportButton
+            r={r}
+            values={values}
+            labels={labels}
+            studyType={studyType}
           />
         </div>
 
@@ -93,14 +99,6 @@ export default function Laboratorio() {
             />
             <SummaryCards r={r} studyType={studyType} />
             <TotalsPanel r={r} values={values} setValues={setValues} />
-            <div className="flex justify-center sm:justify-start">
-              <ExportReportButton
-                r={r}
-                values={values}
-                labels={labels}
-                studyType={studyType}
-              />
-            </div>
           </div>
 
           <div className="lg:sticky lg:top-20">
