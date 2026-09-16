@@ -1,11 +1,13 @@
-import React from 'react';
-import { Contrast, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Contrast, Sparkles, Moon, Sun } from 'lucide-react';
 
 export default function LabHeader({
   reduceMotion,
   setReduceMotion,
   highContrast,
   setHighContrast,
+  darkMode,
+  setDarkMode,
 }) {
   return (
     <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-30">
@@ -22,6 +24,19 @@ export default function LabHeader({
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            aria-pressed={darkMode}
+            className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border transition-colors ${
+              darkMode
+                ? 'bg-teal-700 text-white border-teal-700'
+                : 'text-muted-foreground border-border hover:bg-accent'
+            }`}
+            title="Modo escuro"
+          >
+            {darkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">Modo escuro</span>
+          </button>
           <button
             onClick={() => setReduceMotion(!reduceMotion)}
             aria-pressed={reduceMotion}
