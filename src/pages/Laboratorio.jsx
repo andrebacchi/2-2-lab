@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { calculate2x2 } from '@/lib/stats';
 import LabHeader from '@/components/lab/LabHeader';
 import PresetBar from '@/components/lab/PresetBar';
@@ -26,13 +26,7 @@ export default function Laboratorio() {
     outYes: 'Sim',
     outNo: 'Não',
   });
-  const [reduceMotion, setReduceMotion] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
   const [studyType, setStudyType] = useState('coorte');
@@ -56,19 +50,14 @@ export default function Laboratorio() {
 
   const wrapperClass = [
     'min-h-screen bg-background text-foreground',
-    reduceMotion ? 'reduce-motion' : '',
     highContrast ? 'high-contrast' : '',
   ].join(' ');
 
   return (
     <div className={wrapperClass}>
       <LabHeader
-        reduceMotion={reduceMotion}
-        setReduceMotion={setReduceMotion}
         highContrast={highContrast}
         setHighContrast={setHighContrast}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
       />
 
       <main className="max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6">
@@ -121,7 +110,6 @@ export default function Laboratorio() {
               r={r}
               values={values}
               labels={labels}
-              reduceMotion={reduceMotion}
               studyType={studyType}
             />
           </div>
