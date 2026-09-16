@@ -19,11 +19,11 @@ export function buildInterpretation(type, r, labels) {
       const nulo = Math.abs(r.RR - 1) < 0.01;
       let frase;
       if (nulo) {
-        frase = `O risco de ${outOfExposure} é essencialmente o mesmo em ${expName} e ${unexpName} (RR ≈ 1,00).`;
+        frase = `O risco de ${outOfExposure} é essencialmente o mesmo em ${expName} e ${unexpName} (Risco Relativo ≈ 1,00).`;
       } else if (protetor) {
-        frase = `${expName} têm ${fmt(1 / r.RR, 1)}× menos risco de ${outOfExposure} que ${unexpName} (RR = ${fmt(r.RR, 2)}).`;
+        frase = `${expName} têm ${fmt(1 / r.RR, 1)}× menos risco de ${outOfExposure} que ${unexpName} (Risco Relativo = ${fmt(r.RR, 2)}).`;
       } else {
-        frase = `${expName} têm ${fmt(r.RR, 2)}× mais risco de ${outOfExposure} que ${unexpName}.`;
+        frase = `${expName} têm ${fmt(r.RR, 2)}× mais risco de ${outOfExposure} que ${unexpName} (Risco Relativo = ${fmt(r.RR, 2)}).`;
       }
       const infer = significant
         ? `O IC 95% [${ci}] não inclui 1 e p = ${fmtP(pVal)}, indicando associação estatisticamente significativa.`
@@ -63,11 +63,11 @@ export function buildInterpretation(type, r, labels) {
       const prevUnexp = r.totals.row2 > 0 ? r.c / r.totals.row2 : null;
       let frase;
       if (nulo) {
-        frase = `A prevalência de ${outOfExposure} é semelhante nos dois grupos (RP ≈ 1,00).`;
+        frase = `A prevalência de ${outOfExposure} é semelhante nos dois grupos (Razão de Prevalências ≈ 1,00).`;
       } else if (protetor) {
-        frase = `A prevalência de ${outOfExposure} em ${expName} é ${fmt(1 / r.RR, 1)}× menor que em ${unexpName} (RP = ${fmt(r.RR, 2)}).`;
+        frase = `A prevalência de ${outOfExposure} em ${expName} é ${fmt(1 / r.RR, 1)}× menor que em ${unexpName} (Razão de Prevalências = ${fmt(r.RR, 2)}).`;
       } else {
-        frase = `A prevalência de ${outOfExposure} em ${expName} é ${fmt(r.RR, 2)}× maior que em ${unexpName} (RP = ${fmt(r.RR, 2)}).`;
+        frase = `A prevalência de ${outOfExposure} em ${expName} é ${fmt(r.RR, 2)}× maior que em ${unexpName} (Razão de Prevalências = ${fmt(r.RR, 2)}).`;
       }
       const prev = prevExp !== null && prevUnexp !== null
         ? ` Prevalências: ${fmtPct(prevExp, 1)} (${expName}) vs ${fmtPct(prevUnexp, 1)} (${unexpName}).`
@@ -87,17 +87,17 @@ export function buildInterpretation(type, r, labels) {
       const nnt = rar !== null && rar > 0 ? Math.ceil(1 / rar) : null;
       let frase;
       if (nulo) {
-        frase = `A intervenção não altera o risco de ${outOfExposure} (RR ≈ 1,00).`;
+        frase = `A intervenção não altera o risco de ${outOfExposure} (Risco Relativo ≈ 1,00).`;
       } else if (protetor) {
-        frase = `A intervenção reduz o risco de ${outOfExposure} em ${fmtPct(rrr, 1)} (RR = ${fmt(r.RR, 2)}).`;
+        frase = `A intervenção reduz o risco de ${outOfExposure} em ${fmtPct(rrr, 1)} (Redução Relativa de Risco = 1 − RR; RR = ${fmt(r.RR, 2)}).`;
       } else {
-        frase = `A intervenção aumenta o risco de ${outOfExposure} em ${fmtPct(r.RR - 1, 1)} (RR = ${fmt(r.RR, 2)}).`;
+        frase = `A intervenção aumenta o risco de ${outOfExposure} em ${fmtPct(r.RR - 1, 1)} (Risco Relativo = ${fmt(r.RR, 2)}).`;
       }
       const rarTxt = rar !== null
-        ? ` Redução absoluta de risco (RAR) = ${fmtPct(rar, 1)}.`
+        ? ` Redução Absoluta de Risco (RAR) = ${fmtPct(rar, 1)} (incidência no não tratado − incidência no tratado).`
         : '';
       const nntTxt = nnt !== null
-        ? ` NNT = ${fmtInt(nnt)} (a cada ${fmtInt(nnt)} tratados, evita-se um desfecho).`
+        ? ` NNT = ${fmtInt(nnt)} (1/RAR; a cada ${fmtInt(nnt)} tratados, evita-se um desfecho).`
         : '';
       const infer = significant
         ? ` IC 95% [${ci}] não inclui 1; p = ${fmtP(pVal)}.`

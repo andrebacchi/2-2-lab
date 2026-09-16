@@ -7,40 +7,35 @@ import { fmt, fmtInt, fmtPct, ciText } from '@/lib/format';
 function measureValue(key, r) {
   switch (key) {
     case 'RR':
-      return { val: r.RR, ci: r.RRCI, label: 'RR' };
+      return { val: r.RR, ci: r.RRCI, label: 'Risco Relativo', code: 'RR' };
     case 'RP':
-      return { val: r.RR, ci: r.RRCI, label: 'RP' };
+      return { val: r.RR, ci: r.RRCI, label: 'Razão de Prevalências', code: 'RP' };
     case 'RD':
-      return { val: r.RD, ci: r.RDCI, label: 'RD' };
+      return { val: r.RD, ci: r.RDCI, label: 'Diferença de Risco', code: 'RD' };
     case 'RA':
-      return { val: r.RD, ci: r.RDCI, label: 'RA' };
+      return { val: r.RD, ci: r.RDCI, label: 'Risco Atribuível', code: 'RA' };
     case 'RAP':
-      return { val: r.RAP, ci: r.RAPCI, label: 'RAP' };
+      return { val: r.RAP, ci: r.RAPCI, label: 'Risco Atribuível à População', code: 'RAP' };
     case 'OR':
-      return { val: r.OR, ci: r.ORCI, label: 'OR' };
+      return { val: r.OR, ci: r.ORCI, label: 'Odds Ratio', code: 'OR' };
     case 'RRR':
-      return { val: r.RR !== null ? 1 - r.RR : null, ci: null, label: 'RRR' };
+      return { val: r.RR !== null ? 1 - r.RR : null, ci: null, label: 'Redução Relativa de Risco', code: 'RRR' };
     case 'RAR':
-      return { val: r.RD !== null ? -r.RD : null, ci: null, label: 'RAR' };
+      return { val: r.RD !== null ? -r.RD : null, ci: null, label: 'Redução Absoluta de Risco', code: 'RAR' };
     case 'NNT': {
       const rar = r.RD !== null ? -r.RD : null;
       const val = rar !== null && rar > 0 ? Math.ceil(1 / rar) : null;
-      return { val, ci: null, label: 'NNT' };
+      return { val, ci: null, label: 'NNT', code: 'NNT' };
     }
     default:
-      return { val: null, ci: null, label: key };
+      return { val: null, ci: null, label: key, code: key };
   }
 }
 
 function formatVal(mv) {
   if (mv.val === null) return '—';
-  if (mv.label === 'NNT') return fmtInt(mv.val);
-  if (
-    mv.label === 'RRR' ||
-    mv.label === 'RAR' ||
-    mv.label === 'RA' ||
-    mv.label === 'RAP'
-  )
+  if (mv.code === 'NNT') return fmtInt(mv.val);
+  if (['RRR', 'RAR', 'RA', 'RAP'].includes(mv.code))
     return fmtPct(mv.val, 1);
   return fmt(mv.val, 2);
 }

@@ -11,11 +11,10 @@ export const STUDY_TYPES = {
     icon: Clock,
     desc: 'Acompanha expostos e não expostos no tempo até o desfecho. Mede incidência — logo, risco é estimável.',
     measures: [
-      { key: 'RR', status: 'recomendada', note: 'Razão de riscos (incidências). Estimativa direta do efeito relativo.' },
-      { key: 'RD', status: 'possivel', note: 'Diferença absoluta de risco (ARR). Efeito na escala original; base do NNT.' },
+      { key: 'RR', status: 'recomendada', note: 'Risco Relativo (razão de incidências). Estimativa direta do efeito relativo.' },
+      { key: 'RD', status: 'possivel', note: 'Diferença absoluta de risco. Efeito na escala original.' },
       { key: 'RA', status: 'possivel', note: 'Risco atribuível = risco nos expostos − risco nos não expostos (impacto absoluto da exposição).' },
       { key: 'RAP', status: 'possivel', note: 'Risco atribuível à população = RA × prevalência de exposição. Estima o impacto na população total.' },
-      { key: 'NNT', status: 'possivel', note: 'Número necessário para tratar ≈ 1/|RD|.' },
       { key: 'OR', status: 'possivel', note: 'Válido, mas só aproxima o RR se o desfecho for raro.' },
     ],
   },
