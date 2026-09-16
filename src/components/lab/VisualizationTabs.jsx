@@ -13,7 +13,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import ComparisonBars from './ComparisonBars';
-import StackedBars from './StackedBars';
 import CIPanel from './CIPanel';
 import ForestPlot from './ForestPlot';
 import ExpectedFrequencies from './ExpectedFrequencies';
@@ -30,7 +29,6 @@ const GROUPS = [
     label: 'Associação',
     tabs: [
       { key: 'grupos', label: 'Grupos', icon: BarChart3 },
-      { key: 'proporcoes', label: 'Proporções', icon: Percent },
       { key: 'ic', label: 'IC', icon: Sigma },
       { key: 'forest', label: 'Forest', icon: MoveHorizontal },
     ],
@@ -130,9 +128,6 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
 
       {tab === 'grupos' && (
         <ComparisonBars r={r} labels={labels} reduceMotion={reduceMotion} />
-      )}
-      {tab === 'proporcoes' && (
-        <StackedBars r={r} labels={labels} reduceMotion={reduceMotion} />
       )}
       {tab === 'ic' && <CIPanel r={r} labels={labels} />}
       {tab === 'forest' && <ForestPlot r={r} />}
