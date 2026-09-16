@@ -81,9 +81,6 @@ export default function Laboratorio() {
           />
         </div>
 
-        {/* Resumo principal */}
-        <SummaryCards r={r} />
-
         {/* Layout duas colunas no desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div className="space-y-6">
@@ -94,6 +91,7 @@ export default function Laboratorio() {
               labels={labels}
               setLabels={setLabels}
             />
+            <SummaryCards r={r} />
             <TotalsPanel r={r} values={values} setValues={setValues} />
             <div className="flex justify-center sm:justify-start">
               <ExportReportButton
