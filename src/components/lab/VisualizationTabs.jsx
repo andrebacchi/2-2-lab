@@ -94,19 +94,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
       </div>
 
       {/* Sub-abas do eixo ativo */}
-      <select
-        value={tab}
-        onChange={(e) => setTab(e.target.value)}
-        className="sm:hidden w-full text-sm border border-border rounded-md px-3 py-2 bg-card mb-3 text-foreground"
-        aria-label="Selecionar visualização"
-      >
-        {subTabs.map((t) => (
-          <option key={t.key} value={t.key}>
-            {t.label}
-          </option>
-        ))}
-      </select>
-      <div className="hidden sm:flex items-center gap-1 mb-5 overflow-x-auto pb-1">
+      <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
         {subTabs.map((t) => {
           const Icon = t.icon;
           return (
