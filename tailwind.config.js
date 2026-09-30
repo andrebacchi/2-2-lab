@@ -64,6 +64,10 @@ module.exports = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
+  		// Escala de texto alinhada à série LAB (rótulos pequenos um pouco maiores)
+  		fontSize: {
+  			xs: ['0.8125rem', { lineHeight: '1.15rem' }]
+  		},
   		fontFamily: {
   			heading: ['var(--font-heading)'],
   			body: ['var(--font-body)'],

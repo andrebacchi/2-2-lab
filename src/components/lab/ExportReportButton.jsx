@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Download, Loader2 } from 'lucide-react';
+import { FileText, Loader2 } from 'lucide-react';
+import { LAB_BTN } from './labButtons';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import ReportDocument from './ReportDocument';
@@ -46,9 +47,9 @@ export default function ExportReportButton({ r, values, labels, studyType }) {
       <button
         onClick={exportPDF}
         disabled={busy}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors whitespace-nowrap disabled:opacity-60"
+        className={`${LAB_BTN} disabled:opacity-60`}
       >
-        {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+        {busy ? <Loader2 className="animate-spin" /> : <FileText />}
         Exportar relatório
       </button>
       {/* Documento de relatório renderizado fora da tela para captura */}

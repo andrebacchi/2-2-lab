@@ -1,137 +1,75 @@
 import React, { useState, useEffect } from 'react';
-import { Smartphone, Share, Plus, X } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { LAB_BTN } from './labButtons';
 
-function detectIOS() {
-  if (typeof navigator === 'undefined') return false;
-  const ua = navigator.userAgent || '';
-  const platform = navigator.platform || '';
-  return (
-    /iphone|ipad|ipod/i.test(ua) ||
-    (platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-  );
+// Botão "Instalar" no padrão da série LAB (Nomo LAB, STAT LAB)
+let deferredPrompt = null;
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 }
 
-function isStandalone() {
-  return (
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true
-  );
+function platform() {
+  const u = navigator.userAgent || '';
+  if (/iPhone|iPad|iPod/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1)) return 'ios';
+  if (/Android/.test(u)) return 'android';
+  return 'desktop';
 }
+
+const STEPS = {
+  ios: [<>Abra esta página no <b>Safari</b>.</>, <>Toque em <b>Compartilhar</b> <kbd className="font-mono text-xs bg-muted border border-border rounded px-1">⬆︎</kbd>.</>, <>Toque em <b>Adicionar à Tela de Início</b>.</>, <>Confirme o nome e toque em <b>Adicionar</b>.</>],
+  android: [<>Abra esta página no <b>Chrome</b>.</>, <>Toque no menu <kbd className="font-mono text-xs bg-muted border border-border rounded px-1">⋮</kbd>.</>, <>Toque em <b>Adicionar à tela inicial</b> ou <b>Instalar app</b>.</>, <>Confirme. O ícone aparece junto dos seus apps.</>],
+  desktop: [<><b>Chrome ou Edge:</b> use o ícone de instalar na barra de endereço, ou o menu <kbd className="font-mono text-xs bg-muted border border-border rounded px-1">⋮</kbd> → <b>Transmitir, salvar e compartilhar</b> → <b>Instalar página como app</b>.</>, <><b>Safari (Mac):</b> menu <b>Arquivo</b> → <b>Adicionar ao Dock</b>.</>, <><b>Qualquer navegador:</b> salve nos favoritos com <kbd className="font-mono text-xs bg-muted border border-border rounded px-1">Ctrl</kbd>+<kbd className="font-mono text-xs bg-muted border border-border rounded px-1">D</kbd>.</>],
+};
+const TABS = [['ios', 'iPhone e iPad'], ['android', 'Android'], ['desktop', 'Computador']];
 
 export default function AddToHomeScreenButton() {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [installed, setInstalled] = useState(isStandalone());
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState('android');
+  const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
-    const onPrompt = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-    const onInstalled = () => {
-      setInstalled(true);
-      setDeferredPrompt(null);
-    };
-    window.addEventListener('beforeinstallprompt', onPrompt);
+    setInstalled(window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true);
+    const onInstalled = () => setInstalled(true);
     window.addEventListener('appinstalled', onInstalled);
-    return () => {
-      window.removeEventListener('beforeinstallprompt', onPrompt);
-      window.removeEventListener('appinstalled', onInstalled);
-    };
+    return () => window.removeEventListener('appinstalled', onInstalled);
   }, []);
 
-  const handleClick = async () => {
-    // Android/Chrome: dispara o prompt nativo de instalação (atalho automático)
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      try {
-        await deferredPrompt.userChoice;
-      } catch (_) {}
-      setDeferredPrompt(null);
-      return;
-    }
-    // iOS e demais: mostra instruções
-    setShowInstructions(true);
-  };
+  if (installed) return null;
 
-  const ios = detectIOS();
+  const handleClick = async () => {
+    if (deferredPrompt) {
+      try {
+        deferredPrompt.prompt();
+        const r = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (r?.outcome === 'accepted') return;
+      } catch { /* mostra as instruções */ }
+    }
+    setTab(platform());
+    setOpen(true);
+  };
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors whitespace-nowrap"
-      >
-        <Smartphone className="w-3.5 h-3.5" /> Adicionar aos meus aplicativos
+      <button onClick={handleClick} className={LAB_BTN} aria-label="Instalar o app no celular ou computador">
+        <Download /> Instalar
       </button>
-
-      <Dialog open={showInstructions} onOpenChange={setShowInstructions}>
-        <DialogContent className="max-w-sm">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-teal-700" />
-              Adicionar à tela inicial
-            </DialogTitle>
-            <DialogDescription>
-              {installed
-                ? 'Este app já está instalado no seu dispositivo.'
-                : 'Siga os passos abaixo para criar um atalho.'}
-            </DialogDescription>
+            <DialogTitle className="font-display text-xl">Instalar o 2×2 LAB</DialogTitle>
           </DialogHeader>
-
-          {installed ? (
-            <p className="text-sm text-foreground/80">
-              Você já pode abri-lo diretamente do ícone na tela inicial.
-            </p>
-          ) : ios ? (
-            <ol className="space-y-3 text-sm text-foreground/90">
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">1</span>
-                <span className="flex items-center gap-1.5">
-                  Toque no botão <Share className="w-4 h-4 text-teal-700" /> Compartilhar na barra do Safari.
-                </span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">2</span>
-                <span className="flex items-center gap-1.5">
-                  Role e toque em <Plus className="w-3.5 h-3.5" /> <b>Adicionar à Tela de Início</b>.
-                </span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">3</span>
-                <span>Confirme. O ícone do 2×2 LAB aparecerá na tela inicial.</span>
-              </li>
-            </ol>
-          ) : (
-            <ol className="space-y-3 text-sm text-foreground/90">
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">1</span>
-                <span>Abra o menu do navegador (ícone <b>⋮</b> no canto superior direito).</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">2</span>
-                <span>Toque em <b>Adicionar à tela inicial</b> ou <b>Instalar aplicativo</b>.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-700 text-white text-xs shrink-0">3</span>
-                <span>Confirme. O atalho será criado na tela inicial.</span>
-              </li>
-            </ol>
-          )}
-
-          <div className="flex justify-end mt-2">
-            <Button size="sm" variant="outline" onClick={() => setShowInstructions(false)}>
-              <X className="w-4 h-4" /> Fechar
-            </Button>
+          <p className="text-[15px] leading-relaxed">O 2×2 LAB pode ficar na tela inicial como um aplicativo, abrir em tela cheia e funcionar sem internet depois da primeira visita.</p>
+          <div className="inline-flex flex-wrap gap-0.5 p-[3px] rounded-full border border-border bg-card w-fit">
+            {TABS.map(([k, l]) => (
+              <button key={k} onClick={() => setTab(k)}
+                className={`px-3 py-1.5 rounded-full text-[13px] ${tab === k ? 'bg-foreground text-background' : 'text-muted-foreground'}`}>{l}</button>
+            ))}
           </div>
+          <ol className="list-decimal pl-5 grid gap-1.5 text-[15px]">
+            {STEPS[tab].map((s, i) => <li key={i}>{s}</li>)}
+          </ol>
         </DialogContent>
       </Dialog>
     </>

@@ -58,9 +58,10 @@ export default function Laboratorio() {
       <LabHeader
         highContrast={highContrast}
         setHighContrast={setHighContrast}
+        onTeach={() => setOpenTeach(true)}
       />
 
-      <main className="max-w-[1400px] mx-auto px-5 sm:px-8 py-6 sm:py-8 space-y-6">
+      <main className="max-w-[1400px] mx-auto px-5 sm:px-8 pt-2 pb-8 space-y-6">
         {/* Ferramentas */}
         <div className="flex justify-end items-center gap-2 flex-wrap">
           <ProductToolbar
@@ -76,7 +77,6 @@ export default function Laboratorio() {
               });
             }}
             onDrawer={() => setOpenDrawer(true)}
-            onTeach={() => setOpenTeach(true)}
           />
           <ExportReportButton
             r={r}

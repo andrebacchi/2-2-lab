@@ -1,37 +1,32 @@
 import React from 'react';
-import { Contrast } from 'lucide-react';
+import { Contrast, BookOpen } from 'lucide-react';
+import AddToHomeScreenButton from './AddToHomeScreenButton';
+import { LAB_BTN, LAB_BTN_PRIMARY } from './labButtons';
 
-export default function LabHeader({ highContrast, setHighContrast }) {
+// Cabeçalho no padrão da série LAB: nome à esquerda, Instalar e Como usar à direita
+export default function LabHeader({ highContrast, setHighContrast, onTeach }) {
   return (
-    <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-30">
-      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
-        <div className="flex items-baseline gap-3 min-w-0">
-          <div className="min-w-0">
-            <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-foreground whitespace-nowrap">
-              2×2 <span className="text-teal-700">LAB</span>
-            </h1>
-            <p className="text-[11px] text-muted-foreground/80 font-body">Criado por André D. Bacchi@bacchi.andre
-
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setHighContrast(!highContrast)}
-            aria-pressed={highContrast}
-            className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border transition-colors ${
-            highContrast ?
-            'bg-foreground text-background border-foreground' :
-            'text-muted-foreground border-border hover:bg-accent'}`
-            }
-            title="Modo de alto contraste">
-            
-            <Contrast className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Alto contraste</span>
-          </button>
-        </div>
+    <header className="max-w-[1400px] mx-auto px-5 sm:px-8 pt-[18px] pb-2.5 flex items-center justify-between gap-3 flex-wrap">
+      <div className="min-w-0">
+        <h1 className="font-display text-[34px] leading-none font-semibold tracking-[-0.01em] text-foreground whitespace-nowrap">
+          2×2 <span className="text-teal-700">LAB</span>
+        </h1>
+        <p className="mt-[5px] text-xs text-muted-foreground">Criado por André D. Bacchi</p>
       </div>
-    </header>);
-
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          onClick={() => setHighContrast(!highContrast)}
+          aria-pressed={highContrast}
+          title="Modo de alto contraste"
+          className={highContrast ? LAB_BTN.replace('bg-card', 'bg-foreground').replace('text-foreground', 'text-background') : LAB_BTN}
+        >
+          <Contrast /> <span className="hidden sm:inline">Alto contraste</span>
+        </button>
+        <AddToHomeScreenButton />
+        <button className={LAB_BTN_PRIMARY} onClick={onTeach}>
+          <BookOpen /> Como usar
+        </button>
+      </div>
+    </header>
+  );
 }
