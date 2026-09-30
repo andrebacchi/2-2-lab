@@ -63,7 +63,7 @@ export default function CIPanel({ r, labels }) {
         ci={r.riskExpCI}
         min={0}
         max={1}
-        color="#0f766e"
+        color="#7a284b"
         fmtFn={(v) => fmtPct(v, 1)}
       />
       <Row
@@ -72,7 +72,7 @@ export default function CIPanel({ r, labels }) {
         ci={r.riskUnexpCI}
         min={0}
         max={1}
-        color="#14b8a6"
+        color="#c66a8d"
         fmtFn={(v) => fmtPct(v, 1)}
       />
       <Row
@@ -81,7 +81,7 @@ export default function CIPanel({ r, labels }) {
         ci={r.RDCI}
         min={-1}
         max={1}
-        color="#0f766e"
+        color="#7a284b"
         fmtFn={(v) => fmt(v, 2)}
       />
     </div>

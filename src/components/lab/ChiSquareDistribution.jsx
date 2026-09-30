@@ -75,14 +75,14 @@ export default function ChiSquareDistribution({ r }) {
         className="w-full h-44 border border-border rounded-md bg-card"
       >
         {critPath && <path d={critPath} fill="#fecaca" opacity="0.6" />}
-        {tailPath && <path d={tailPath} fill="#0f766e" opacity="0.35" />}
-        <path d={linePath} fill="none" stroke="#0f766e" strokeWidth="0.6" />
+        {tailPath && <path d={tailPath} fill="#7a284b" opacity="0.35" />}
+        <path d={linePath} fill="none" stroke="#7a284b" strokeWidth="0.6" />
         <line
           x1={sx(observed)}
           y1={0}
           x2={sx(observed)}
           y2={H}
-          stroke="#0f766e"
+          stroke="#7a284b"
           strokeWidth="0.5"
           strokeDasharray="2 2"
         />

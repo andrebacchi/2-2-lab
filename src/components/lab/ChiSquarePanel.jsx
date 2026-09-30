@@ -80,7 +80,7 @@ export default function ChiSquarePanel({ r, reduceMotion }) {
             </div>
             <div
               className="text-sm font-semibold tabular-nums"
-              style={{ color: '#0f766e' }}
+              style={{ color: '#7a284b' }}
             >
               {fmt(c.v, 3)}
             </div>

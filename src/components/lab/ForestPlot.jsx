@@ -3,8 +3,8 @@ import { fmt, ciText } from '@/lib/format';
 
 export default function ForestPlot({ r }) {
   const measures = [
-    { key: 'RR', label: 'RR / RP', est: r.RR, ci: r.RRCI, color: '#0f766e' },
-    { key: 'OR', label: 'OR', est: r.OR, ci: r.ORCI, color: '#0d9488' },
+    { key: 'RR', label: 'RR / RP', est: r.RR, ci: r.RRCI, color: '#7a284b' },
+    { key: 'OR', label: 'OR', est: r.OR, ci: r.ORCI, color: '#93335b' },
   ].filter((m) => m.est !== null);
 
   if (measures.length === 0) {

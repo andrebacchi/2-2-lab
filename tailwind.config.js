@@ -11,6 +11,8 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			// Cor-tema do 2×2 LAB: vinho (substitui o verde-azulado; Nomo LAB = verde, STAT LAB = azul)
+  			teal: {50:'#fbf3f6',100:'#f6e4eb',200:'#ecc6d4',300:'#dd9ab2',400:'#c66a8d',500:'#ad4670',600:'#93335b',700:'#7a284b',800:'#62213d',900:'#4d1c31',950:'#2e0f1c'},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
