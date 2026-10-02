@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { calculate2x2 } from '@/lib/stats';
+import { calculate2x2, parsePrevalence, withExposurePrevalence } from '@/lib/stats';
 import LabHeader from '@/components/lab/LabHeader';
 import PresetBar from '@/components/lab/PresetBar';
 import SummaryCards from '@/components/lab/SummaryCards';
@@ -30,13 +30,20 @@ export default function Laboratorio() {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
   const [studyType, setStudyType] = useState('coorte');
+  // Prevalência da exposição na população (texto em %), usada no RAP da coorte.
+  // Vazio = usa a proporção de expostos da própria tabela.
+  const [expPrev, setExpPrev] = useState('');
   const { toast } = useToast();
   const { history, saved, saveSnapshot, removeSaved, clearHistory } =
     useLabStore(values, labels);
 
   const r = useMemo(
-    () => calculate2x2(values.a, values.b, values.c, values.d),
-    [values]
+    () =>
+      withExposurePrevalence(
+        calculate2x2(values.a, values.b, values.c, values.d),
+        parsePrevalence(expPrev)
+      ),
+    [values, expPrev]
   );
 
   const loadPreset = (p) =>
@@ -107,6 +114,8 @@ export default function Laboratorio() {
               values={values}
               labels={labels}
               studyType={studyType}
+              expPrev={expPrev}
+              setExpPrev={setExpPrev}
             />
           </div>
         </div>

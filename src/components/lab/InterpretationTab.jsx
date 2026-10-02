@@ -3,6 +3,7 @@ import { Sparkles, CheckCircle2, Circle, XCircle } from 'lucide-react';
 import { buildInterpretation } from '@/lib/interpretation';
 import { studyName, STUDY_TYPES } from '@/lib/studyTypes';
 import { fmt, fmtInt, fmtPct, ciText } from '@/lib/format';
+import { parsePrevalence } from '@/lib/stats';
 
 function measureValue(key, r) {
   switch (key) {
@@ -32,12 +33,83 @@ function measureValue(key, r) {
   }
 }
 
+const PCT_CODES = ['RRR', 'RAR', 'RA', 'RAP'];
+
 function formatVal(mv) {
   if (mv.val === null) return '—';
   if (mv.code === 'NNT') return fmtInt(mv.val);
-  if (['RRR', 'RAR', 'RA', 'RAP'].includes(mv.code))
-    return fmtPct(mv.val, 1);
+  if (PCT_CODES.includes(mv.code)) return fmtPct(mv.val, 1);
   return fmt(mv.val, 2);
+}
+
+// O IC acompanha a unidade do valor: medidas em % mostram o IC em %.
+function formatCI(mv) {
+  if (!PCT_CODES.includes(mv.code)) return ciText(mv.ci);
+  const { low, high } = mv.ci;
+  if (!Number.isFinite(low) || !Number.isFinite(high)) return 'não estimável';
+  return `${fmtPct(low, 1)} – ${fmtPct(high, 1)}`;
+}
+
+// Campo para informar a prevalência da exposição na população (RAP da coorte).
+function ExposurePrevalenceField({ r, expPrev, setExpPrev }) {
+  const parsed = parsePrevalence(expPrev);
+  const invalid = Number.isNaN(parsed);
+  const sample = r.PeSample;
+  return (
+    <div className="mt-2.5 rounded-md border border-border bg-muted/40 px-3 py-2.5">
+      <label
+        htmlFor="exp-prev"
+        className="block text-xs font-semibold text-foreground"
+      >
+        Prevalência da exposição na população
+      </label>
+      <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+        <div
+          className={`flex items-center rounded-md border bg-card px-2.5 h-10 w-32 focus-within:border-teal-700 ${
+            invalid ? 'border-red-400' : 'border-border'
+          }`}
+        >
+          <input
+            id="exp-prev"
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={expPrev}
+            onChange={(e) => setExpPrev(e.target.value)}
+            placeholder={sample !== null ? fmt(sample * 100, 1) : 'ex.: 30'}
+            aria-invalid={invalid}
+            aria-describedby="exp-prev-help"
+            className="w-full min-w-0 bg-transparent outline-none text-base font-semibold tabular-nums text-foreground placeholder:text-muted-foreground/60 placeholder:font-normal"
+          />
+          <span className="text-sm text-muted-foreground ml-1">%</span>
+        </div>
+        {expPrev !== '' && (
+          <button
+            type="button"
+            onClick={() => setExpPrev('')}
+            className="text-xs text-teal-700 font-medium underline underline-offset-2"
+          >
+            Usar a da amostra
+          </button>
+        )}
+      </div>
+      <p id="exp-prev-help" className="text-xs text-muted-foreground mt-1.5">
+        {invalid
+          ? 'Digite um valor entre 0 e 100.'
+          : r.PeCustom
+            ? `Usando ${fmtPct(r.Pe, 1)}, informada por você.`
+            : sample !== null
+              ? `Em branco, usa a proporção de expostos da tabela (${fmtPct(sample, 1)}), que na coorte costuma ser fixada pelo desenho e não representa a população.`
+              : 'Em branco, usa a proporção de expostos da tabela.'}
+      </p>
+      {r.RD !== null && r.Pe !== null && r.RAP !== null && (
+        <p className="text-xs text-foreground mt-1.5 font-mono tabular-nums">
+          RAP = RA × Pe = {fmtPct(r.RD, 1)} × {fmtPct(r.Pe, 1)} ={' '}
+          <b>{fmtPct(r.RAP, 1)}</b>
+        </p>
+      )}
+    </div>
+  );
 }
 
 const STATUS = {
@@ -61,7 +133,7 @@ const STATUS = {
   },
 };
 
-export default function InterpretationTab({ r, labels, studyType }) {
+export default function InterpretationTab({ r, labels, studyType, expPrev = '', setExpPrev }) {
   const text = buildInterpretation(studyType, r, labels);
   const study = STUDY_TYPES[studyType] || STUDY_TYPES.coorte;
   const recommended = study.measures.find((m) => m.status === 'recomendada');
@@ -99,7 +171,7 @@ export default function InterpretationTab({ r, labels, studyType }) {
             {formatVal(recVal)}{' '}
             {recVal.ci && (
               <span className="text-sm font-normal text-muted-foreground">
-                [{ciText(recVal.ci)}]
+                [{formatCI(recVal)}]
               </span>
             )}
           </div>
@@ -142,13 +214,20 @@ export default function InterpretationTab({ r, labels, studyType }) {
                       {mv.ci && (
                         <span className="text-muted-foreground font-normal">
                           {' '}
-                          [{ciText(mv.ci)}]
+                          [{formatCI(mv)}]
                         </span>
                       )}
                     </span>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{m.note}</p>
+                {m.key === 'RAP' && setExpPrev && (
+                  <ExposurePrevalenceField
+                    r={r}
+                    expPrev={expPrev}
+                    setExpPrev={setExpPrev}
+                  />
+                )}
               </div>
             </div>
           );

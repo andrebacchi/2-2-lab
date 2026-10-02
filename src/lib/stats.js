@@ -352,6 +352,9 @@ export function calculate2x2(a, b, c, d) {
     RDCI,
     RAP,
     RAPCI,
+    Pe, // prevalência da exposição usada no RAP (aqui, a da própria amostra)
+    PeSample: Pe,
+    PeCustom: false,
     riskExpCI,
     riskUnexpCI,
     expected,
@@ -370,6 +373,30 @@ export function calculate2x2(a, b, c, d) {
 }
 
 // n mínimo absoluto: a tabela nunca colapsa para tudo-zero, preservando as proporções
+// Lê uma prevalência digitada em % ("30", "12,5", "12.5%"). Devolve a proporção (0–1),
+// null se o campo estiver vazio, ou NaN se o texto não for um valor entre 0 e 100.
+export function parsePrevalence(text) {
+  const t = String(text ?? '').trim().replace('%', '').replace(',', '.').trim();
+  if (t === '') return null;
+  if (!/^\d*\.?\d+$|^\d+\.$/.test(t)) return NaN;
+  const v = parseFloat(t);
+  return Number.isFinite(v) && v >= 0 && v <= 100 ? v / 100 : NaN;
+}
+
+// Recalcula o Risco Atribuível à População com uma prevalência de exposição
+// informada pelo usuário (a da população-alvo), em vez da proporção de expostos
+// da amostra. RAP = RA × Pe; o IC acompanha o do RA, com Pe tratada como fixa.
+export function withExposurePrevalence(r, pe) {
+  if (pe === null || pe === undefined || !Number.isFinite(pe)) return r;
+  return {
+    ...r,
+    Pe: pe,
+    PeCustom: true,
+    RAP: r.RD !== null ? pe * r.RD : null,
+    RAPCI: r.RDCI ? { low: pe * r.RDCI.low, high: pe * r.RDCI.high } : null,
+  };
+}
+
 export const MIN_N = 4;
 
 // redimensiona a tabela mantendo as proporções (maior resto) — soma = newN

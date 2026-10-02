@@ -14,7 +14,7 @@ export const STUDY_TYPES = {
       { key: 'RR', status: 'recomendada', note: 'Risco Relativo (razão de incidências). Estimativa direta do efeito relativo.' },
       { key: 'RD', status: 'possivel', note: 'Diferença absoluta de risco. Efeito na escala original.' },
       { key: 'RA', status: 'possivel', note: 'Risco atribuível = risco nos expostos − risco nos não expostos (impacto absoluto da exposição).' },
-      { key: 'RAP', status: 'possivel', note: 'Risco atribuível à população = RA × prevalência de exposição. Estima o impacto na população total.' },
+      { key: 'RAP', status: 'possivel', note: 'Risco atribuível à população = RA × prevalência da exposição. Estima o impacto na população total; informe abaixo a prevalência da exposição na população de interesse.' },
       { key: 'OR', status: 'possivel', note: 'Válido, mas só aproxima o RR se o desfecho for raro.' },
     ],
   },

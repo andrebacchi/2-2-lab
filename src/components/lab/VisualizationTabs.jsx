@@ -61,7 +61,7 @@ function findGroup(tabKey) {
   return GROUPS[0].key;
 }
 
-export default function VisualizationTabs({ r, labels, reduceMotion, values, studyType }) {
+export default function VisualizationTabs({ r, labels, reduceMotion, values, studyType, expPrev, setExpPrev }) {
   const [tab, setTab] = useState('interpretacao');
   const [group, setGroup] = useState(findGroup(tab));
 
@@ -138,7 +138,13 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
       {tab === 'avancado' && <AdvancedPanel r={r} />}
       {tab === 'interpretacao' && (
-        <InterpretationTab r={r} labels={labels} studyType={studyType} />
+        <InterpretationTab
+          r={r}
+          labels={labels}
+          studyType={studyType}
+          expPrev={expPrev}
+          setExpPrev={setExpPrev}
+        />
       )}
     </div>
   );

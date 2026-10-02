@@ -31,8 +31,11 @@ export function buildInterpretation(type, r, labels) {
       const rd = r.RD !== null
         ? ` A diferença absoluta de risco (RA) é de ${fmtPct(Math.abs(r.RD), 1)} ${r.RD >= 0 ? 'a mais' : 'a menos'} nos expostos.`
         : '';
+      const peTxt = r.Pe !== null && r.Pe !== undefined
+        ? ` (RA × prevalência da exposição de ${fmtPct(r.Pe, 1)}, ${r.PeCustom ? 'informada para a população' : 'a proporção de expostos da amostra'})`
+        : '';
       const rap = r.RAP !== null
-        ? ` Risco atribuível à população (RAP) = ${fmtPct(r.RAP, 1)} — parcela do risco na população devida à exposição.`
+        ? ` Risco atribuível à população (RAP) = ${fmtPct(r.RAP, 1)}${peTxt}: é o excesso de risco na população inteira que se deve à exposição.`
         : '';
       return `${frase} ${infer}${rd}${rap}`;
     },
