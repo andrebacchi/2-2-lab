@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { LAB_BTN } from './labButtons';
+import { janelaApp, appInstalado, marcarInstalado } from '@/lib/janela';
+
+const CHAVE = '2-2-lab.instalado';
 
 // Botão "Instalar" no padrão da série LAB (Nomo LAB, STAT LAB)
 let deferredPrompt = null;
@@ -26,16 +29,19 @@ const TABS = [['ios', 'iPhone e iPad'], ['android', 'Android'], ['desktop', 'Com
 export default function AddToHomeScreenButton() {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState('android');
-  const [installed, setInstalled] = useState(false);
+  const [janela, setJanela] = useState('navegador');
 
   useEffect(() => {
-    setInstalled(window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true);
-    const onInstalled = () => setInstalled(true);
+    const j = janelaApp(CHAVE);
+    setJanela(j);
+    if (j === 'outra') appInstalado(CHAVE).then((ok) => { if (ok) setJanela('propria'); });
+    const onInstalled = () => { marcarInstalado(CHAVE); setJanela('propria'); };
     window.addEventListener('appinstalled', onInstalled);
     return () => window.removeEventListener('appinstalled', onInstalled);
   }, []);
 
-  if (installed) return null;
+  // some só na janela do próprio app instalado; dentro de outro app (BACCHI LAB), continua visível
+  if (janela === 'propria') return null;
 
   const handleClick = async () => {
     if (deferredPrompt) {
@@ -60,6 +66,11 @@ export default function AddToHomeScreenButton() {
           <DialogHeader>
             <DialogTitle className="font-display text-xl">Instalar o 2×2 LAB</DialogTitle>
           </DialogHeader>
+          {janela === 'outra' && (
+            <p className="rounded-[10px] bg-muted px-3 py-2.5 text-sm">
+              Você abriu este app por dentro de outro, como o BACCHI LAB, e daqui não dá para instalar. Toque em <kbd className="font-mono text-xs bg-card border border-border rounded px-1">⋮</kbd> no alto da tela e em <b>Abrir no Chrome</b>; lá, toque de novo em <b>Instalar</b>.
+            </p>
+          )}
           <p className="text-[15px] leading-relaxed">O 2×2 LAB pode ficar na tela inicial como um aplicativo, abrir em tela cheia e funcionar sem internet depois da primeira visita.</p>
           <div className="inline-flex flex-wrap gap-0.5 p-[3px] rounded-full border border-border bg-card w-fit">
             {TABS.map(([k, l]) => (
