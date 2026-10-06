@@ -5,6 +5,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "related_applications": [{ "platform": "webapp", "url": "https://andrebacchi.github.io/2-2-lab/manifest.json" }],
   "orientation": "any",
   "background_color": "#fbfaf7",
   "theme_color": "#5c1f39",
