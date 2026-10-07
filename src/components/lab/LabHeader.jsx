@@ -1,9 +1,10 @@
 import React from 'react';
 import { Contrast, BookOpen } from 'lucide-react';
 import AddToHomeScreenButton from './AddToHomeScreenButton';
+import QrButton from './QrButton';
 import { LAB_BTN, LAB_BTN_PRIMARY } from './labButtons';
 
-// Cabeçalho no padrão da série LAB: link de volta ao BACCHI LAB e nome à esquerda, Instalar e Como usar à direita
+// Cabeçalho no padrão da série LAB: link de volta ao BACCHI LAB e nome à esquerda, QR code, Instalar e Como usar à direita
 export default function LabHeader({ highContrast, setHighContrast, onTeach }) {
   return (
     <header className="max-w-[1400px] mx-auto px-5 sm:px-8 pt-[18px] pb-2.5 flex items-center justify-between gap-3 flex-wrap">
@@ -28,6 +29,7 @@ export default function LabHeader({ highContrast, setHighContrast, onTeach }) {
         >
           <Contrast /> <span className="hidden sm:inline">Alto contraste</span>
         </button>
+        <QrButton />
         <AddToHomeScreenButton />
         <button className={LAB_BTN_PRIMARY} onClick={onTeach}>
           <BookOpen /> Como usar
