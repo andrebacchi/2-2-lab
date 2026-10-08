@@ -1,6 +1,7 @@
 import React from 'react';
 import { gammq } from '@/lib/stats';
 import { fmt, fmtInt, fmtP } from '@/lib/format';
+import StatLabLink from './StatLabLink';
 
 // p exato bilateral do teste de sinal (binomial, p=0,5) — usado p/ b+c < 25
 function binomTwoSided(b, c) {
@@ -21,7 +22,7 @@ function binomTwoSided(b, c) {
   return Math.min(1, p);
 }
 
-export default function McNemarPanel({ r }) {
+export default function McNemarPanel({ r, labels }) {
   const { b, c } = r;
   const disc = b + c;
   const chi2 = disc > 0 ? (Math.abs(b - c) - 1) ** 2 / disc : null;
@@ -89,6 +90,12 @@ export default function McNemarPanel({ r }) {
       <p className="text-xs text-muted-foreground italic mt-4">
         Rejeita-se H0 (proporções iguais) quando p &lt; 0,05.
       </p>
+      {r.b + r.c > 0 && (
+        <StatLabLink r={r} labels={labels} test="mcn">
+          Só para tabela pareada (as mesmas pessoas medidas duas vezes): fazer
+          o McNemar no STAT LAB, com a simulação de mil estudos
+        </StatLabLink>
+      )}
     </div>
   );
 }

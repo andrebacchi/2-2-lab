@@ -1,7 +1,8 @@
 import React from 'react';
 import { fmt, fmtP } from '@/lib/format';
+import StatLabLink from './StatLabLink';
 
-export default function TestsComparison({ r }) {
+export default function TestsComparison({ r, labels }) {
   const rows = [
     { name: 'Pearson', stat: r.chi2, p: r.pPearson, note: 'aproximação padrão' },
     {
@@ -70,6 +71,10 @@ export default function TestsComparison({ r }) {
           Fisher.
         </div>
       )}
+      <StatLabLink r={r} labels={labels} test={smallExpected ? 'fisher' : 'chi'}>
+        Fazer o {smallExpected ? 'teste exato de Fisher' : 'qui-quadrado'} no STAT LAB: distribuição de
+        referência, frase para relatar e simulação de mil estudos
+      </StatLabLink>
     </div>
   );
 }

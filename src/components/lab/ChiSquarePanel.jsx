@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { fmt, fmtP } from '@/lib/format';
 import { Play } from 'lucide-react';
+import StatLabLink from './StatLabLink';
 
-export default function ChiSquarePanel({ r, reduceMotion }) {
+export default function ChiSquarePanel({ r, labels, reduceMotion }) {
   const [playKey, setPlayKey] = useState(0);
   const cells = ['a', 'b', 'c', 'd'];
   const contribs = cells.map((k) => ({ k, v: r.contributions[k] }));
@@ -87,6 +88,10 @@ export default function ChiSquarePanel({ r, reduceMotion }) {
           </div>
         ))}
       </div>
+      <StatLabLink r={r} labels={labels} test="chi">
+        Fazer este qui-quadrado no STAT LAB: distribuição de referência, frase
+        para relatar e simulação de mil estudos
+      </StatLabLink>
     </div>
   );
 }

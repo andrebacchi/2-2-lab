@@ -132,9 +132,9 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
       {tab === 'ic' && <CIPanel r={r} labels={labels} />}
       {tab === 'forest' && <ForestPlot r={r} />}
       {tab === 'esperado' && <ExpectedFrequencies r={r} />}
-      {tab === 'chisq' && <ChiSquarePanel r={r} reduceMotion={reduceMotion} />}
+      {tab === 'chisq' && <ChiSquarePanel r={r} labels={labels} reduceMotion={reduceMotion} />}
       {tab === 'distribuicao' && <ChiSquareDistribution r={r} />}
-      {tab === 'testes' && <TestsComparison r={r} />}
+      {tab === 'testes' && <TestsComparison r={r} labels={labels} />}
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
       {tab === 'avancado' && <AdvancedPanel r={r} labels={labels} />}
       {tab === 'interpretacao' && (
