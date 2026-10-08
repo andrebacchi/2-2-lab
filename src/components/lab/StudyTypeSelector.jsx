@@ -1,7 +1,10 @@
 import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { STUDY_TYPES, STUDY_ORDER } from '@/lib/studyTypes';
+import { studyLabUrl, studyLabLabel } from '@/lib/studyLab';
 
 // Seletor compacto do desenho do estudo — fica junto à tabela 2×2.
+// O link no rodapé abre o STUDY LAB já no desenho selecionado, para quem quiser entender de onde vem a tabela.
 export default function StudyTypeSelector({ type, setType }) {
   return (
     <div className="rounded-xl border border-border bg-card p-3 sm:p-4">
@@ -33,6 +36,17 @@ export default function StudyTypeSelector({ type, setType }) {
           })}
         </div>
       </div>
+      <a
+        href={studyLabUrl(type)}
+        target="_blank"
+        rel="noopener"
+        className="mt-3 pt-3 border-t border-border flex items-center gap-1.5 text-xs text-teal-700 font-medium no-underline hover:underline"
+      >
+        <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+        <span>
+          Entender o {studyLabLabel(type)} no STUDY LAB
+        </span>
+      </a>
     </div>
   );
 }

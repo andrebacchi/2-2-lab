@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { calculate2x2, parsePrevalence, withExposurePrevalence } from '@/lib/stats';
 import LabHeader from '@/components/lab/LabHeader';
 import PresetBar from '@/components/lab/PresetBar';
@@ -15,9 +15,16 @@ import FirstTimeOnboarding from '@/components/lab/FirstTimeOnboarding';
 import StudyTypeSelector from '@/components/lab/StudyTypeSelector';
 import ExportReportButton from '@/components/lab/ExportReportButton';
 import { useLabStore } from '@/hooks/useLabStore';
+import { readStudyParams, clearStudyParams } from '@/lib/studyLab';
+import { studyName } from '@/lib/studyTypes';
+
+// Tabela enviada pelo STUDY LAB no endereço (lida uma única vez, ao abrir a página).
+const FROM_STUDY_LAB = readStudyParams();
 
 export default function Laboratorio() {
-  const [values, setValues] = useState({ a: 0, b: 0, c: 0, d: 0 });
+  const [values, setValues] = useState(
+    FROM_STUDY_LAB ? FROM_STUDY_LAB.values : { a: 0, b: 0, c: 0, d: 0 }
+  );
   const [labels, setLabels] = useState({
     exposureName: 'Exposição',
     outcomeName: 'Desfecho',
@@ -29,13 +36,27 @@ export default function Laboratorio() {
   const [highContrast, setHighContrast] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openTeach, setOpenTeach] = useState(false);
-  const [studyType, setStudyType] = useState('coorte');
+  const [studyType, setStudyType] = useState(FROM_STUDY_LAB?.type || 'coorte');
   // Prevalência da exposição na população (texto em %), usada no RAP da coorte.
   // Vazio = usa a proporção de expostos da própria tabela.
   const [expPrev, setExpPrev] = useState('');
   const { toast } = useToast();
   const { history, saved, saveSnapshot, removeSaved, clearHistory } =
     useLabStore(values, labels);
+
+  useEffect(() => {
+    if (!FROM_STUDY_LAB) return;
+    clearStudyParams();
+    const { a, b, c, d } = FROM_STUDY_LAB.values;
+    // um instante depois: o aviso só aparece se o Toaster já estiver montado
+    const t = setTimeout(() => {
+      toast({
+        title: 'Tabela recebida do STUDY LAB',
+        description: `${a + b + c + d} indivíduos${FROM_STUDY_LAB.type ? ` · ${studyName(FROM_STUDY_LAB.type)}` : ''}`,
+      });
+    }, 300);
+    return () => clearTimeout(t);
+  }, []);
 
   const r = useMemo(
     () =>
