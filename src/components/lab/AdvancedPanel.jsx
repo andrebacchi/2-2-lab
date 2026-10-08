@@ -13,7 +13,7 @@ const SUB = [
   { key: 'estrat', label: 'Estratificação', C: StratificationPanel },
 ];
 
-export default function AdvancedPanel({ r }) {
+export default function AdvancedPanel({ r, labels }) {
   const [sub, setSub] = useState('dx');
   const Current = SUB.find((s) => s.key === sub).C;
   return (
@@ -33,7 +33,7 @@ export default function AdvancedPanel({ r }) {
           </button>
         ))}
       </div>
-      <Current r={r} />
+      <Current r={r} labels={labels} />
     </div>
   );
 }

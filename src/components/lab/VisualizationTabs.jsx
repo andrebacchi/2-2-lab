@@ -136,7 +136,7 @@ export default function VisualizationTabs({ r, labels, reduceMotion, values, stu
       {tab === 'distribuicao' && <ChiSquareDistribution r={r} />}
       {tab === 'testes' && <TestsComparison r={r} />}
       {tab === 'explicacao' && <ExplanationPanel r={r} values={values} />}
-      {tab === 'avancado' && <AdvancedPanel r={r} />}
+      {tab === 'avancado' && <AdvancedPanel r={r} labels={labels} />}
       {tab === 'interpretacao' && (
         <InterpretationTab
           r={r}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { proportionCI } from '@/lib/stats';
 import { fmt, fmtPct, ciText } from '@/lib/format';
+import { ArrowUpRight } from 'lucide-react';
 import FaganNomogram from './FaganNomogram';
+import { nomoDxUrl } from '@/lib/nomoLab';
 
 const sd = (x, y) => (y > 0 ? x / y : null);
 
-export default function DiagnosticPanel({ r }) {
+export default function DiagnosticPanel({ r, labels }) {
   const { a, b, c, d } = r;
   const n = a + b + c + d;
   const sens = sd(a, a + c);
@@ -154,6 +156,27 @@ export default function DiagnosticPanel({ r }) {
               postPos={postPos}
               postNeg={postNeg}
             />
+            {/* leva o mesmo teste para o Nomo LAB, com a pré-teste escolhida aqui */}
+            <a
+              href={nomoDxUrl({
+                se: sens,
+                sp: spec,
+                nD: a + c,
+                nH: b + d,
+                pre,
+                test: labels?.exposureName,
+                disease: labels?.outcomeName,
+              })}
+              target="_blank"
+              rel="noopener"
+              className="mt-4 pt-3 border-t border-border flex items-start gap-1.5 text-xs text-teal-700 font-medium no-underline hover:underline"
+            >
+              <ArrowUpRight className="w-3.5 h-3.5 shrink-0 mt-px" />
+              <span>
+                Levar este teste ao Nomo LAB: frequências naturais, limiares de
+                decisão e teste em sequência
+              </span>
+            </a>
           </div>
         ) : (
           <p className="text-xs text-muted-foreground italic">
